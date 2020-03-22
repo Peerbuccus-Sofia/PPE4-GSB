@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1> {% if app.user %} Bonjour {{ app.user.username }} {% endif %}</h1>
+   
+    <appart>
+        <div>
+           {% for appart in apparts %}
+                <section class="row">
+                    <div class="col-sm-3">
+                        <img src="/images/appartements/{{ appart.filename }}" alt="" class="img-fluid img-thumbnail">
+                    </div>
+                    <aside class="col-sm-4">
+                        <address>
+                            <p><strong>Appartement</strong></p>
+                            {{appart.adr }} <br>
+                            {{appart.ville }}  {{appart.cp }}
+                        </address>
+                    </aside>
+
+                </section> <hr>               
+           </table>  
+      {% endfor %}
+        </div>
+       
+    </appart>
+{{ knp_pagination_render(apparts)}}
+
+
+{% endblock %}

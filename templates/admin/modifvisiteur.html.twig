@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+        <visiteur>
+            <table class="table">
+                <tr>
+                    <th>Nom</th><td> {{ visiteur.nom }}</td>
+                </tr>
+                <tr>
+                    <th>Prénom</th><td> {{ visiteur.prenom }}</td>
+                </tr>
+                <tr>
+                    <th>Adresse</th><td> {{ visiteur.adr }}</td>
+                </tr>
+                <tr>
+                    <th>Ville</th><td> {{ visiteur.ville }}</td>
+                </tr>
+                <tr>
+                    <th>Code Postale</th><td> {{ visiteur.cp }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone</th><td> {{ visiteur.tel }}</td>
+                </tr>
+                <tr>
+                    <th>Login</th><td> {{ visiteur.username }}</td>
+                </tr>
+                <tr>
+                     <th>Mot de passe</th><td> {{ visiteur.password }}</td>
+                </tr>
+            </table>           
+        </visiteur>
+    
+{% endblock %}

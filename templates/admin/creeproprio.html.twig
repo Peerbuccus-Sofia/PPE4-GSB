@@ -1,0 +1,27 @@
+{% extends "base.html.twig" %} 
+{% form_theme formProprio 'bootstrap_4_layout.html.twig' %}
+{% block body %}
+
+<h1>Ajouter un nouveau propriétaire</h1>
+
+<!-- ouverture du formulaire Proprio -->
+{{ form_start(formProprio) }} 
+
+    {{ form_row(formProprio.nom, {'attr': {'placeholder' : "Nom du Proprio ...", 'label' : "Nom du Proprio"}} ) }}
+    {{ form_row(formProprio.prenom, {'label' : 'Prénom'}) }}
+    {{ form_row(formProprio.adr, {'label' : 'Adresse'}) }}
+    {{ form_row(formProprio.ville) }}
+    {{ form_row(formProprio.cp, {'label' : 'Code Postal'}) }}
+    {{ form_row(formProprio.tel, {'label' : 'Téléphone'}) }}
+    {{ form_row(formProprio.username, { 'attr' : {'placeholder' : 'Exemple : vis_nom.prenom'}} ) }}
+    <div class="form-group">
+        <label for="">Mot de passe</label>
+        {{ form_widget(formProprio.password,{'attr' : {'placeholder' : 'Doit contenir au moins 8 caratères'}} ) }}
+    </div> 
+
+    <button type="submit" class="btn btn-info">Valider</button>
+
+<!-- fermeture du formulaire -->
+{{ form_end(formProprio) }}
+
+{% endblock %}

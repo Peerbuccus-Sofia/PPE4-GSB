@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %} 
+{% form_theme formVisiteur 'bootstrap_4_layout.html.twig' %}
+{% block body %}
+
+<h1>Créer un nouveau visiteur</h1>
+
+<!-- ouverture du formulaire Visiteur -->
+{{ form_start(formVisiteur) }} 
+
+        {{ form_row(formVisiteur.nom, {'attr': {'placeholder' : "Nom du visiteur ...", 'label' : "Nom du visiteur"}} ) }}
+        {{ form_row(formVisiteur.prenom, {'label' : 'Prénom'}) }}
+        {{ form_row(formVisiteur.adr, {'label' : 'Adresse'}) }}
+        {{ form_row(formVisiteur.ville) }}
+        {{ form_row(formVisiteur.cp, {'label' : 'Code Postal'}) }}
+        {{ form_row(formVisiteur.tel, {'label' : 'Téléphone'}) }}
+        {{ form_row(formVisiteur.username, { 'attr' : {'placeholder' : 'Exemple : vis_nom.prenom'}} ) }}
+        <div class="form-group">
+            <label for="">Mot de passe</label>
+             {{ form_widget(formVisiteur.password,{ 'attr' : {'placeholder' : 'Doit contenir au moins 8 caratères'}} ) }}
+        </div> 
+       
+    
+<button type="submit" class="btn btn-info">Valider</button>
+
+<!-- fermeture du formulaire -->
+{{ form_end(formVisiteur) }}
+
+{% endblock %}

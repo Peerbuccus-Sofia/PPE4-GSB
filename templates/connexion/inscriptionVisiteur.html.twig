@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h1>Inscription</h1>
+
+    {{form_start(form) }}
+    
+    {{form_row(form.nom, {'attr': {'placeholder' : "Votre nom ..."}} )}}
+    {{ form_row(form.prenom, {'label' : 'Prénom', 'attr': {'placeholder' : "Votre Prénom ..."} }) }}
+    {{ form_row(form.adr, {'label' : 'Adresse', 'attr': {'placeholder' : "Adresse ..."} }) }}
+    {{ form_row(form.ville, {'attr': {'placeholder' : "Ville ..."}}) }}
+    {{ form_row(form.cp, {'label' : 'Code Postal', 'attr': {'placeholder' : "Code Postal ..."}}) }}
+    {{ form_row(form.tel, {'label' : 'Téléphone', 'attr': {'placeholder' : "Exemple : 0102030405"}}) }}
+    {{ form_row(form.username, { 'attr' : {'placeholder' : 'Exemple : nom.prenom'}} ) }}
+    {{ form_row(form.password,{'label' : 'Mot de passe', 'attr' : {'placeholder' : 'Doit contenir au moins 8 caratères'}} ) }}
+    {{ form_row(form.confirm_password, {'label' : 'Confirmation de votre mot de passe ', 'attr' : {'placeholder' : 'Vérification votre mot de passe'}} )}}
+   
+    
+
+    <button type="submit" class="btn btn-info">Confirmer</button>
+{{ form_end(form) }}
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    
+    <h1><proprio> {{ proprio.nom}} {{proprio.prenom }}</proprio></h1><hr>
+    <h2>Ajouter un appartement</h2>
+    {{ form_start(formAppart)}}
+        {# , {'value' : proprio.idpers} #}
+        {{ form_row(formAppart.proprietaire) }}
+        {{ form_row(formAppart.adr, {'label' : 'Adresse'}) }}
+        {{ form_row(formAppart.ville) }}
+        {{ form_row(formAppart.cp, {'label' : 'Code Postal'}) }}
+        {{ form_row(formAppart.typeappart, {'label' : 'Type d\'appartement'}) }}
+        {{ form_row(formAppart.etage, {'label' : 'Etage'}) }}
+        {{ form_row(formAppart.taille)}}
+        {{ form_row(formAppart.loyer, {'label' : 'Loyer'}) }}
+        {{ form_row(formAppart.charge, {'label' : 'Charge'}) }}
+        {{ form_row(formAppart.tauxcotisation, {'label' : 'Taux de cotisation'})}}
+        {{ form_row(formAppart.ascenseur, { label_attr: {class: 'checkbox-custom'} }) }} <hr>
+        {{ form_row(formAppart.preavis, { label_attr: {class: 'checkbox-custom'}} ) }} <hr>
+        {{ form_row(formAppart.datelibre, {'label' : 'Date de libération de l\'appartement'}) }}
+        {{ form_row(formAppart.imageFile, {'label' : 'Ajouter une image'}) }} <hr>
+        
+        <button type="submit"  class="btn btn-info">Valider</button>
+
+    {{ form_end(formAppart)}}
+ {% endblock %}

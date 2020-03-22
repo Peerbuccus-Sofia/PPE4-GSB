@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container"><br>
+        
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Prenom</th>
+                <th scope="col">Date de naissance</th>
+                <th scope="col">RIB</th>
+                <th scope="col">Téléphone de banque</th>
+                <th scope="col">Téléphone perso</th>
+                <th scope="col" colspan="2">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for loc in locs %}
+                    <loc>
+                        <tr>    
+                            <td>{{ loc.nom }}</td>
+                            <td>{{ loc.prenom }}</td>
+                            <td>{{ loc.datenaissance }}</td>
+                            <td>{{ loc.rib }}</td>
+                            <td>{{ loc.telbanque }}</td>
+                            <td>{{ loc.tel }}</td>
+                            <td><a href="{{ path('admin_infoloc', {'id' : loc.idpers }) }}">En savoir plus</a></td>
+                            <td><a href="">Supprimer</a></td>
+                        
+                        </tr>
+                    </loc>
+                {% endfor %}    
+               
+            </tbody>
+        </table>
+    </div>
+    
+{% endblock %}

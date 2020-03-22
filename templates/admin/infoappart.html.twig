@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<br>
+    <table class="table">
+        <appart>
+            <tr>
+                <th>Propriétaire</th><td>{{ appart.proprietaire.nom }} {{ appart.proprietaire.prenom }} </td><td></td>
+            </tr>
+            <tr><th>Type d'appartement</th><td>{{ appart.typeappart }}</td><td>Modifier</td></tr>
+            <tr><th>Adresse</th><td>{{ appart.adr }}</td><td>Modifier</td></tr>
+            <tr><th>Ville</th><td>{{ appart.ville}}</td><td>Modifier</td></tr>
+            <tr><th>Code Postale</th><td>{{ appart.cp}}</td><td>Modifier</td></tr>
+            <tr><th>Loyer</th><td>{{ appart.loyer}} EUROS</td><td>Modifier</td></tr>
+            <tr><th>Charge</th><td>{{ appart.charge}} EUROS </td><td>Modifier</td></tr>
+            <tr><th>Taux de cotisations</th><td>{{ appart.tauxcotisation}} % </td><td>Modifier</td></tr>
+            <tr><th>Ascenceur</th><td>{{ appart.ascenseur}} <span class="glyphicon glyphicon-ok"></span></td><td>Modifier</td></tr>
+            <tr><th>Préavis</th><td>{{ appart.preavis}}</td><td>Modifier</td></tr>
+            <tr><th>Taille</th><td>{{ appart.taille}}</td><td>Modifier</td></tr>
+            <tr><th>Date de libération</th><td>{{ appart.datelibre| date('Y/m/d')}}</td><td>Modifier</td></tr>
+            <tr><th>Occupé par :</th><td></td></tr>
+        </appart>
+    </table>
+    <div>
+        <button type="button" class="btn btn-outline-info"><a href="{{ path('admin_infoproprio', {'id' : appart.proprietaire.idpers }) }}">Retour</a></button>
+    </div>
+    {% endblock %}

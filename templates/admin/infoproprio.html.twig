@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<proprio> 
+<div class="container" style="margin-top:30px">
+    <div class="row">
+      <div class="col-sm-4">
+        <h2>Propriétaire :</h2>
+        <h5>{{ proprio.nom }} </h5>
+        <h5>{{ proprio.prenom }}</h5>
+        <br><br><br>
+        <ul class="nav nav-pills flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Locataire</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{{ path('admin_creeAppart', {'id' : proprio.idpers })}}">Nouvel appartement</a>
+          </li>
+        </ul>
+        <hr class="d-sm-none">
+      </div>
+      <div class="col-sm-8">
+        
+        <h2>Informations personnelles:</h2>
+        
+          <div>
+            <table class="table">
+                <tr>
+                   <th>Adresse</th><td> {{ proprio.adr }}</td><td>Modifier</td>
+                </tr>
+                <tr>
+                   <th>Ville</th><td> {{ proprio.ville }}</td><td>Modifier</td>
+                </tr>
+                <tr>
+                   <th>Code Postale</th><td> {{ proprio.cp }}</td><td>Modifier</td>
+                </tr>
+                <tr>
+                   <th>Téléphone</th><td> {{ proprio.tel }}</td><td>Modifier</td>
+                </tr>
+                <tr>
+                   <th>Login</th><td> {{ proprio.username }}</td><td>Modifier</td>
+                </tr>
+                <tr>
+                   <th>Mot de passe</th><td> {{ proprio.password }}</td><td>Modifier</td>
+                </tr>
+            </table>           
+          </div>
+       
+        <br>
+        
+      </div>
+      <h2>Ses appartements</h2>
+        <table class="table">
+          <thead class="thead-light">
+            <th scope="col">N°</th>
+            <th scope="col">Adresse</th>
+            <th scope="col">Ville</th>
+            <th scope="col">Code Postal</th>
+            <th scope="col">Etage</th>
+            <th scope="col">Type d'appartement</th>
+            <th scope="col">Loyer</th>
+            <th scope="col">Plus</th>
+            <th scope="col" colspan="2">Supprimer</th>  
+          </thead>
+          <tbody>
+            {% for appart in proprio.apparts %}
+              <tr>
+                <td>{{ appart.idappart }}</td>
+                <td>{{ appart.adr }}</td>
+                <td>{{ appart.ville }}</td>
+                <td>{{ appart.cp }}</td>
+                <td>{{ appart.etage }}</td>
+                <td>{{ appart.typeappart }}</td>
+                <td>{{ appart.loyer }}</td>
+                <td><a href="{{ path('admin_infoappart', {'id': proprio.idpers, 'idAppart' : appart.idappart }) }}">Plus d'informations</a></td>
+                <td><a>Supprimer</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </proprio>
+    </div>
+  </div>
+ 
+
+{% endblock %}

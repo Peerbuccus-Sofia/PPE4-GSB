@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container"><br>
+        <a href="{{ path('admin_creeproprio') }}" class="btn btn-info">Nouveau propriétaire</a><br><br>
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Prenom</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Ville</th>
+                <th scope="col">Code Postal</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col" colspan="2">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for proprio in proprios %}
+                    <proprio>
+                        <tr>    
+                            <td>{{ proprio.nom }}</td>
+                            <td>{{ proprio.prenom }}</td>
+                            <td>{{ proprio.adr }}</td>
+                            <td>{{ proprio.ville }}</td>
+                            <td>{{ proprio.cp }}</td>
+                            <td>{{ proprio.tel }}</td>
+                            <td><a href="{{ path('admin_infoproprio', {'id' : proprio.idpers }) }}">En savoir plus</a></td>
+                            <td><a href="">Supprimer</a></td>
+                        
+                        </tr>
+                    </proprio>
+                {% endfor %}    
+               
+            </tbody>
+        </table>
+    </div>
+    
+{% endblock %}
