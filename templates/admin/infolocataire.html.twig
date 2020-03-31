@@ -7,33 +7,42 @@
      
       <div class="col-sm-8">
         <loc> 
-            <h2>Informations personnelles de :</h2>
-            <h5>{{ loc.nom }}{{ loc.prenom }}</h5>
-              <div>
-                <table class="table">
-                    <tr>
-                       <th>Téléphone Banque</th><td> {{ loc.telbanque }}</td><td>Modifier</td>
-                    </tr>
-                    <tr>
-                       <th>RIB</th><td> {{ loc.rib }}</td><td>Modifier</td>
-                    </tr>
-                    <tr>
-                       <th>Téléphone personnelle</th><td> {{ loc.tel }}</td><td>Modifier</td>
-                    </tr>
-                    <tr>
-                       <th>Appartement n°</th><td> {{ loc.__toString }}</td><td>Modifier</td>
-                    </tr>
-                    <tr>
-                       <th>Login</th><td> {{ loc.username }}</td><td>Modifier</td>
-                    </tr>
-                    <tr>
-                       <th>Mot de passe</th><td> {{ loc.password }}</td><td>Modifier</td>
-                    </tr>
-                </table>           
-              </div>
-            </loc><br>
-        <h2>Appartement loué</h2>
-        <h5>Adresse : </h5>
+               <h2>Informations personnelles de :</h2>
+               <h4>{{ loc.nom }} {{ loc.prenom }}</h4>
+               <div>
+                  <table class="table">
+                     <tr>
+                        <th>Téléphone Banque</th><td> {{ loc.telbanque }}</td><td>Modifier</td>
+                     </tr>
+                     <tr>
+                        <th>RIB</th><td> {{ loc.rib }}</td><td>Modifier</td>
+                     </tr>
+                     <tr>
+                        <th>Téléphone personnelle</th><td> {{ loc.tel }}</td><td>Modifier</td>
+                     </tr>
+                     <tr>
+                        <th>Appartement n°</th><td> {{ loc.__toString }}</td><td>Modifier</td>
+                     </tr>
+                     <tr>
+                        <th>Login</th><td> {{ loc.username }}</td><td>Modifier</td>
+                     </tr>
+                  </table>           
+               </div>
+            <br>
+            
+            <h2>Location de M. / Mme {{ loc.nom }} {{ loc.prenom }}</h2>
+            <br>
+            <div class="row">
+               <div class="col-6">
+                  <h5>Réside à :</h5>
+                   <h5> {{ loc.appartement.adr }}  </h5>
+                   <h5>       {{ loc.appartement.ville }} - {{ loc.appartement.cp }}</h5>
+               </div>
+               <br><br><br><br>
+               <div class="col-4"><a href="{{ path('ficheappart', {'idappart' : loc.appartement.idappart }) }}" class="btn btn-info" type="button">Voir la fiche de l'appartement</a></div>
+            </div>
+              
+          </loc>
       </div>
     </div>
   </div>

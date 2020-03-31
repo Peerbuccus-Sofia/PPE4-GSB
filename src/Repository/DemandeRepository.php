@@ -19,6 +19,19 @@ class DemandeRepository extends ServiceEntityRepository
         parent::__construct($registry, Demande::class);
     }
 
+    // public function rechercheappart($critere)
+    // {
+    //     return $this->createQueryBuilder('d')
+    //                 ->where('d.typedem = :typedem')
+    //                 ->setParameter('typedem', $critere->getTypedem())
+    //                 ->andwhere('d.ville = :ville')
+    //                 ->setParameter('ville', $critere->getVille())
+    //                 ->andwhere('d.prix = :prix')
+    //                 ->setParameter('prix', $critere->getPrix())
+    //                 ->getQuery()
+    //                 ->getResult()
+    //                 ;
+    // }
     
 
 

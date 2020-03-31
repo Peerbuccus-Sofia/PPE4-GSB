@@ -1,0 +1,67 @@
+ {% extends "base.html.twig" %}
+
+ {% block body %}
+ {# {{ dump(locataire)}} #}
+<br><br>
+    <div class="container emp-profile">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="profile-img">
+                        <img src="https://via.placeholder.com/300x250" alt=""/>
+                    </div>
+                {# {{ dump(user) }} #}
+                
+                </div>
+                <div class="col-md-6">
+                    <h2> Locataire actuelle : {{ locataire.nom }}</h2><hr>
+                    <h4>Voici sa fiche de renseignement</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="profile-work">
+                        <p></p>
+                        <a href="{{ path('accueil') }}" class="btn btn-info">Retour</a>
+                    </div>
+                    <div class="profile-work">
+                        <p></p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="profile-head">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Information personnelle du locataire</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <div class="row">
+                                        <div class="col-md-6"><label>Nom</label></div>
+                                        <div class="col-md-6"><p>{{ locataire.nom }}</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6"><label>Prénom</label></div>
+                                        <div class="col-md-6"><p>{{ locataire.prenom }}</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6"><label>Téléphone</label></div>
+                                        <div class="col-md-6"><p>{{ locataire.tel }}</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6"><label>Date de naissance</label></div>
+                                        <div class="col-md-6"><p>{{ locataire.datenaissance | date('d/m/Y')}}</p></div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6"><label>RIB</label></div>
+                                        <div class="col-md-6"><p>**********</p></div>
+                                    </div>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>         
+    </div>
+{% endblock %}

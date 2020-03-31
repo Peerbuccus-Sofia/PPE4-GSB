@@ -1,8 +1,5 @@
-{% extends 'base.html.twig' %}
-{% block body %}
-    <h1>Inscription</h1>
 
-    {{form_start(form) }}
+{{form_start(form) }}
     
     {{form_row(form.nom, {'attr': {'placeholder' : "Votre nom ..."}} )}}
     {{ form_row(form.prenom, {'label' : 'Prénom', 'attr': {'placeholder' : "Votre Prénom ..."} }) }}
@@ -15,8 +12,9 @@
     {{ form_row(form.confirm_password, {'label' : 'Confirmation de votre mot de passe ', 'attr' : {'placeholder' : 'Vérification votre mot de passe'}} )}}
    
     
-
-    <button type="submit" class="btn btn-info">Confirmer</button>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-5"><button type="submit" class="btn btn-info">Confirmer</button></div>
+    </div>
+    
 {{ form_end(form) }}
-
-{% endblock %}

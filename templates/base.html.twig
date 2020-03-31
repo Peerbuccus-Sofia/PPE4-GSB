@@ -8,7 +8,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="{{ path('visiteuracceuil') }}">Accueil</a>
+            <a class="navbar-brand" href="{{ path('accueil') }}">Accueil</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -18,6 +18,9 @@
                         {% if not app.user %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('app_login')}}">Connexion</a>
+                            </li>
+                            <li class="nav-item">
+                               {# {{ include ('security/_form.html.twig', { error : error} ) }}#}
                             </li>
                         {% elseif is_granted('ROLE_ADMIN')%}
                          <li class="nav-item">
@@ -29,13 +32,16 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('admin_lesLocataires')}}">Locataire</a>
                         </li>
-                        {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_logout')}}">Se déconnecter</a>
-                            </li>
-                        {% endif %}
                     </ul>
-                    
+                    <div class="form-inline my-2 my-lg-0">
+                        <a class="btn btn-outline-light my-2 my-sm-0" href="{{ path('app_logout')}}">Se déconnecter</a>
+                    </div>
+                        {% elseif (is_granted('ROLE_VISITEUR')) or (is_granted('ROLE_LOC')) or (is_granted('ROLE_PROPRIO'))  %}
+                </ul>
+                        <div class="form-inline my-2 my-lg-0">
+                            <a class="btn btn-outline-light my-2 my-sm-0" href="{{ path('app_logout')}}">Se déconnecter</a>
+                        </div>
+                        {% endif %}
                 </div>
         </nav>
         <div class="container">

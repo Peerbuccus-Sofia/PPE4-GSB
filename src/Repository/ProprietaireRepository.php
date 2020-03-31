@@ -19,6 +19,11 @@ class ProprietaireRepository extends ServiceEntityRepository
         parent::__construct($registry, Proprietaire::class);
     }
 
+    public function getcotisationsById($idproprio)
+    {
+        
+    }
+
     // /**
     //  * @return Proprietaire[] Returns an array of Proprietaire objects
     //  */

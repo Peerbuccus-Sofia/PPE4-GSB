@@ -26,7 +26,12 @@
                             <td>{{ proprio.cp }}</td>
                             <td>{{ proprio.tel }}</td>
                             <td><a href="{{ path('admin_infoproprio', {'id' : proprio.idpers }) }}">En savoir plus</a></td>
-                            <td><a href="">Supprimer</a></td>
+                            <td>
+                                {# <form method="post" action="{{ path('admin_suppproprio', {'id' : proprio.idpers }) }}"> #}
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button class="btn btn-danger">Supprimer</button>
+                                </form>
+                            </td>
                         
                         </tr>
                     </proprio>

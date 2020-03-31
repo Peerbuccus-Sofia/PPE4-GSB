@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<br>
+<div class="container">
+    {% if is_granted('ROLE_ADMIN') %}
+    {{ dump( unAppart )}}
+        {% for l in loc %}
+            {# {{ dump(loc) }} #}
+        <a class="btn btn-info" href="{{ path("admin_infoloc", {'id' : l.idpers }) }}" type="button">Locataire résidant</a>
+        {% endfor %}
+        <a class="btn btn-info" href="{{ path("admin_infoproprio", {'id' : unAppart.proprietaire.idpers }) }}" type="button">Propriétaire de cet appartement</a>
+
+    {% elseif is_granted('ROLE_VISITEUR') %}
+        <div class="row">
+        <a class="btn btn-info" href="{{ path("accueil") }}" type="button">  Retour aux résultat</a>
+    {% elseif  is_granted('ROLE_LOC') %}
+        <a class="btn btn-info" href="{{ path("accueil") }}" type="button">  Retour à ma fiche</a>
+    {% elseif  is_granted('ROLE_PROPRIO') %}
+            {% for l in loc %}
+                {% if loc |length == 0 %}
+                <h4>Il n'y a pas de locataire dans cet appartement</h4>
+                {% else %}
+                <a class="btn btn-info" href="{{ path("proprio_loc", { 'idpers' : l.idpers}) }}" type="button">Information locataire</a>
+                {% endif %}
+            {% endfor %}
+    {% endif %}
+       
+</div>
+
+    <div class="row"></div>
+    <hr>
+    <unAppart>
+        <div>
+            <p>Location d'appartement de {{ unAppart.taille }} <var>m<sup>2</sup></var> {{ unAppart.ville }} {{ unAppart.cp }} - {{ unAppart.adr }}</p>
+            {% if unAppart.filename|length == 0 %}
+            <img src="https://via.placeholder.com/900x500" alt=""/>
+        {% else %}
+            <img src="/images/appartements/{{ unAppart.filename }}" alt="" class="img-fluid img-thumbnail" height="900px" width="950">
+        {% endif %}
+        </div>
+        <div class="row">
+            <div class="col">
+                <strong>Appartement</strong>
+            </div>
+            <div class="col">
+                {% for tarif in tarifs %}
+               <strong> {{ tarif.tarif }}
+                {% endfor %}
+              &euro;/mois CC (charges comprise)</strong>
+            </div>
+        </div>
+        <p>{{ unAppart.ville }} {{ unAppart.cp }} - {{ unAppart.adr }}</p>
+            
+        
+        <div class="row"  style="background-color: #EAEAEA  ">
+            <p><strong>Informations général</strong></p>
+            <table class="table borderless">
+                    
+                <tr>   
+                    <td>Surface de {{ unAppart.taille }} <var>m<sup>2</sup></var> </td>
+                </tr>
+                <tr>
+                    <td>Au {{ unAppart.etage}} ème étage</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>{{ unAppart.typeappart }}</td>
+                </tr>
+                <tr>
+                    {% if unAppart.ascenseur == 1 %}
+                    <td>Ascenseur</td>
+                    {% else %}
+                    <td></td> 
+                    {% endif %}
+                </tr>
+            </table>
+        </div>
+            
+        <br>
+            
+        <div class="row" style="background-color: #EAEAEA ">
+            <div>
+                <p><strong>Informations tarif</strong></p>
+                <p>Le loyer : {{ unAppart.loyer }} &euro;/mois</p>
+                <p>Les charges : {{ unAppart.charge }} &euro;/mois</p>
+                <p>Soit 
+                    {% for tarif in tarifs %}
+                    <strong> {{ tarif.tarif }}
+                     {% endfor %}
+                   &euro;/mois CC </strong>    
+                </p>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div>
+                {% if not app.user %}
+                Pour faire une demande de visite vous devez être connecter
+                    <a class="btn btn-info" type="button" href="{{ path('app_login')}}">Connexion</a><br>
+                Pas de compte ? Cliquez ici 
+                    <a class="btn btn-info" type="button" href="{{ path('inscriptionVisiteur') }}">Inscription</a>
+            </div>
+                {% elseif is_granted('ROLE_VISITEUR') %}
+                <div class="col-10"></div>
+                <div class="col">
+                    <a href="{{ path('visite', { 'idappart' : unAppart.idappart })}}" class="btn btn-info" type="button" >Visiter</a>
+                </div>  
+                {% elseif  is_granted('ROLE_ADMIN') %}
+
+            {% endif %}
+        </div>      
+
+    </unAppart>
+   
+</div>
+{% endblock %}

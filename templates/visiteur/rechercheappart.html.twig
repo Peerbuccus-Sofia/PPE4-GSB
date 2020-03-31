@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm"></div>
+        <div class="col-sm">
+            {{ form_start(demandeappart) }}
+
+            {{form_row(demandeappart.typeappart, {'label' : 'Nombre de pièces'})}}
+            {{form_row(demandeappart.ville)}}
+            {{form_row(demandeappart.loyer)}}
+
+
+            {{form_end(demandeappart)}} </div>
+        
+        <div class="col-sm"></div>
+    </div>
+</div>
+
+{% if app.request.method == 'POST' %}
+
+<div class="row">
+    <div class="col-10">
+
+        {% if apparts |length == 0 %}
+            <h2>Il n'y a pas de résultat pour votre recherche</h2>
+        {% else %}
+            <h2>Résultat de votre recherche</h2><hr>
+                <appart>
+                    <div>
+                        {% for appart in apparts %}
+                            <section class="row">
+                            <div class="col-sm-3">
+                                {% if appart.filename is null %}
+                                    <p>Il n'y a pas d'image pour cette appartement</p>
+                                {% else %}
+                                <img src="/images/appartements/{{ appart.filename }}" alt="" class="img-fluid img-thumbnail">
+                                {% endif %}
+                            </div>
+                            <aside class="col-sm-4">
+                                <address>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p><strong>Appartement</strong></p>
+                                        </div>
+                                        <div class="col"> {{ appart.loyer }} &euro;/mois</div>
+                                    </div>
+                                                
+                                        {{appart.typeappart }} <br>
+                                        {{appart.ville }}  {{appart.cp }}<br>
+                                        {{appart.adr }} 
+                               </address>
+                                    <div class="row">
+                                        <div class="col"></div>
+                                        <div class="col">
+                                            <a class="btn btn-info" type="button" href="{{ path('ficheappart', {'idappart' : appart.idappart } )}}" >En savoir plus</a>
+                                        </div>
+                                    </div>
+                                    
+                            </aside>
+                                    
+                            </section> <hr>               
+                        {% endfor %}
+                    </div>
+                </appart>
+                {{ knp_pagination_render(apparts)}}
+            </div>
+        {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+{% endblock %}

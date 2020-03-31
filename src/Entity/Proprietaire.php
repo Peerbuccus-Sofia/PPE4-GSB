@@ -87,11 +87,11 @@ class Proprietaire implements UserInterface
      */
     private $password;
 
-    // /**
-    //  * @var string|null
-    //  * @ORM\Column(name="ROLE", type="json", length=32, nullable=true, options={"default"="ROLE_PROPRIO","fixed"=true})
-    //  */
-    // private $roles;
+    /**
+     * @var string|null
+     * @ORM\Column(name="ROLE", type="json", length=32, nullable=true, options={"default"="ROLE_PROPRIO","fixed"=true})
+     */
+    private $roles;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Appartement", mappedBy="proprietaire")
@@ -211,9 +211,7 @@ class Proprietaire implements UserInterface
 
     public function getSalt(){}
 
-    // /**
-    //  * @See UserInterface
-    //  */
+
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -227,11 +225,6 @@ class Proprietaire implements UserInterface
         $this->roles = $roles;
         return $this;
     }
-
-    // public function getRoles(){
-    //     return ["ROLE_PROPRIO"];
-    // }
-
 
      /**
       * @return Collection|Apparts[]

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un nouvel appartement{% endblock %}
+
+{% block body %}
+ <div class="container"><br>
+        <h3>Nouvel appartement</h3><hr>
+        {{ include ('admin/appart/_form.html.twig', {form : formAppart, button: 'Editer'} )}}
+     
+ </div>
+{% endblock %}

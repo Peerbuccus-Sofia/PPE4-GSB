@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Visiter;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Vich\UploaderBundle\Mapping\Annotation\Uploadable;
-use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Appartement
@@ -31,16 +30,9 @@ class Appartement
     private $idappart;
 
     /**
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Proprietaire", inversedBy="apparts")
-     * @ORM\JoinColumn(nullable=false, name="PROPRIETAIRE_ID", referencedColumnName="IDPERS") 
-     */
-    private $proprietaire;
-
-    /**
      * @var string|null
      *
-     * @ORM\Column(name="ADR", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
+     * @ORM\Column(name="ADR", type="string", length=255, nullable=true, options={"default"="NULL","fixed"=true})
      */
     private $adr;
 
@@ -124,14 +116,14 @@ class Appartement
 
     /**
      * @var string|null
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(name="filename", type="string", length=255)
      */
     private $filename;
 
     
     /**
      * @var File|null
-     * Vich\UploadableField(mapping="property_image", fileNameProperty="filename")
+     * Vich\UploadableField(mapping="appart_image", fileNameProperty="filename")
      */
     private $imageFile;
     
@@ -140,25 +132,41 @@ class Appartement
      */
     private $updated_at;
     
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Proprietaire", inversedBy="apparts")
+     * @ORM\JoinColumn(nullable=false, name="PROPRIETAIRE_ID", referencedColumnName="IDPERS") 
+     */
+    private $proprietaire;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Locataire", mappedBy="appartement")
      */
     private $locataires;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Visite", mappedBy="appartement", orphanRemoval=true)
+     */
+    private $lesvisites;
+
+    // /**
+    //  * @ORM\OneToMany(targetEntity="App\Entity\Visiter", mappedBy="appartement")
+    //  */
+    // private $visites;
+
    
     public function __construct()
     {
-        $this->locataires = new ArrayCollection();   
+        $this->locataires = new ArrayCollection();
+        $this->lesvisites = new ArrayCollection(); 
+       // $this->visites = new ArrayCollection();  
     }
-
-    
+   
 
     public function getIdappart(): ?int
     {
         return $this->idappart;
     }
-    
 
      /**
     * toString
@@ -330,22 +338,26 @@ class Appartement
         return $this->filename;
     }
 
-    public function setFilename(?string $filename): self
+    public function setFilename(?string $filename): Appartement
     {
         $this->filename = $filename;
 
         return $this;
     }
 
-    public function getImageFile(): ?string
+    /**
+     * @return null|File
+     */
+    public function getImageFile(): ?File
     {
         return $this->imageFile;
-        if ($this->imageFile instanceof UploadedFile){
-            $this->updated_at = new \DateTime('now');
-        }
     }
 
-    public function setImageFile(?string $imagefile): self
+    /**
+     * @param null|File $imageFile
+     * @return Appartement
+     */
+    public function setImageFile(?File $imagefile): Appartement
     {
         $this->imageFile = $imagefile;
         if ($this->imageFile instanceof UploadedFile){
@@ -396,8 +408,63 @@ class Appartement
           return $this;
       }
 
+      /**
+       * @return Collection|Visite[]
+       */
+      public function getLesvisites(): Collection
+      {
+          return $this->lesvisites;
+      }
 
-     
+      public function addLesvisite(Visite $lesvisite): self
+      {
+          if (!$this->lesvisites->contains($lesvisite)) {
+              $this->lesvisites[] = $lesvisite;
+              $lesvisite->setAppartement($this);
+          }
 
+          return $this;
+      }
+
+      public function removeLesvisite(Visite $lesvisite): self
+      {
+          if ($this->lesvisites->contains($lesvisite)) {
+              $this->lesvisites->removeElement($lesvisite);
+              // set the owning side to null (unless already changed)
+              if ($lesvisite->getAppartement() === $this) {
+                  $lesvisite->setAppartement(null);
+              }
+          }
+
+          return $this;
+      } 
+      
+    //   /**
+    //   * @return Collection|Visite[]
+    //   */
+    //   public function getVisites(): Collection
+    //   {
+    //        return $this->visites;
+    //   }
+      
+    //   public function addVisite(Visiter $visite): self
+    //   {
+    //       if(!$this->visites->contains($visite)){
+    //           $this->visites[] = $visite;
+    //           $visite->setAppartement($this);
+    //       }
+    //       return $this;
+    //   }
+  
+    //   public function removeVisite(Visiter $visite): self //supprimer une visite
+    //   {
+    //       if($this->visites->contains($visite)){
+    //           $this->visites->removeElement($visite);
+    //           if($visite->getAppartement() === $this ){
+    //               $visite->setAppartement(null);
+    //           }
+    //       }
+    //       return $this;
+    //   }
 
 }

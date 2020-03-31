@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Appartement {{ user.nom }} {{ user.prenom }}{% endblock %}
+
+{% block body %}
+{% if is_granted('ROLE_PROPRIO') %}
+<br>
+<div class="container">
+    <a href="{{ path('proprio_nvlapp') }}" class="btn btn-info">Nouvel appartement</a><hr>
+    <div class="row">
+        <div class="col">
+            {% for appart in user.apparts %}
+            <section class="row">
+                <div class="col-sm-3">
+                    <img src="/images/appartements/{{ appart.filename }}" alt="" class="img-fluid img-thumbnail">
+                </div>
+                <aside class="col-sm-4">
+                    <address>
+                        <div class="row">
+                            <div class="col">
+                                <p><strong>Appartement</strong></p>
+                            </div>
+                            <div class="col"> {{ appart.loyer }} &euro;/mois</div>
+                        </div>
+                    
+                        {{appart.typeappart }} <br>
+                        {{appart.ville }}  {{appart.cp }}<br>
+                        {{appart.adr }} 
+                    </address>
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col">
+                            <a class="btn btn-info" type="button" href="{{ path('ficheappart', {'idappart' : appart.idappart } )}}" >En savoir plus</a>
+                        </div>
+                    </div>
+                
+                </aside>
+                
+            </section> <hr>              
+            {% endfor %}
+        </div>
+    </div>
+</div>    
+    {% endif %}
+
+{% endblock %}

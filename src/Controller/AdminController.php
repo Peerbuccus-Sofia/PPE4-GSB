@@ -9,13 +9,14 @@ use App\Entity\Proprietaire;
 use App\Repository\VisiteurRepository;
 use App\Repository\LocataireRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\AppartementRepository;
 use App\Repository\ProprietaireRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -111,8 +112,8 @@ class AdminController extends AbstractController
 
          if($form->isSubmitted() && $form->isValid()){ //si form est soumis et que les champs sont valide
 
-            $passwordEncoded = $encoder->encodePassword($proprio, $proprio->getPassword());
-            $proprio->setPassword($passwordEncoded);
+            $passwordEncoded = $encoder->encodePassword($proprio, $proprio->getPassword()); //permet d'encoder le mdp
+            $proprio->setPassword($passwordEncoded); //modifie le mdp en mdp encoder
 
              $manager->persist($proprio); //faire persiter dans le temps les infos du proprietaire
              $manager->flush(); //enregistrer dans la bdd
@@ -141,39 +142,65 @@ class AdminController extends AbstractController
      * @Route("/listeProprio/{id}", name="infoproprio")
      * retourne les informations d'une propriétaire en fonction de son id
      */
-    public function getproprio(Proprietaire $proprio){
+    public function getproprio(Proprietaire $proprio, AppartementRepository $appartementRepository){
+        $cotisations = $appartementRepository->getcotisations($proprio->getIdpers());
         return $this->render('admin/infoproprio.html.twig', [
-            'proprio' => $proprio
+            'proprio' => $proprio,
+            'cotisations' => $cotisations,
+            
         ]);
     }
+
+    // /**
+    //  * @Route("proprio/{id}", name="suppproprio", methods="DELETE")
+    //  * @Method("DELETE")
+    //  */
+    // public function delete(Request $request, Proprietaire $proprio, EntityManagerInterface $manager){
+    //     dump('supp');
+    //      $manager->remove($proprio);
+    //      $manager->flush();
+    //     return $this->redirectToRoute('lesProprios');
+    // }
 
     /**
      * @Route("/listeProprio/{id}/appart/{idAppart}", name="infoappart")
      * @ParamConverter("listeProprio", options={"mapping": {"id" : "idpers" }} )
      * @ParamConverter("appart", options={"mapping" : {"idAppart" : "idappart" }} )
      */
-    public function getappartPro(Appartement $appart){
+    public function getappartPro(Appartement $appart, LocataireRepository $repo, AppartementRepository $appartementRepository){
+        $tarif = $appartementRepository->getloyercharge($appart->getIdappart());
+        $loc = $repo->getloc($appart->getIdappart());
         return $this->render('admin/infoappart.html.twig', [
-            'appart' => $appart
+            'loc' => $loc,
+            'appart' => $appart,
+            'tarifs' => $tarif
         ]);
     }
-    /**
-     * @Route("/creeAppart/{id}", name="creeAppart")
-     */
-    public function creeAppart(Request $request, EntityManagerInterface $manager, Proprietaire $proprio){
-        // $repository = $this->getDoctrine()->getRepository(Proprietaire::class);
-        // $proprio = $repository->find();
-       
-        $appart = new Appartement();
 
+    /**
+     * @Route("appart/{id}", name="suppappart", methods="DELETE")
+     * @Method("DELETE")
+     */
+    public function delete(Request $request, Appartement $appart, EntityManagerInterface $manager){
+        dump('supp');
+        dump($appart);
+        //pour la sécurité, vérifier que le token soit valide
+        if ($this->isCsrfTokenValid('delete'.$appart->getIdappart(), $request->get('_token'))){
+            $manager->remove($appart);
+            $manager->flush(); 
+        }
+        
+        return $this->redirectToRoute('admin_infoproprio', ['id' => $appart->getProprietaire()->getIdpers()] );
+    }
+
+
+    /**
+     * @Route("/appart/{idappart}/edit/{id}", name="edit_appart")
+     * @ParamConverter("appart", options={"mapping" : {"idappart" : "idappart" }} )
+     * @ParamConverter("edit", options={"mapping" : {"id" : "idpers" }} )
+     */
+    public function edit(Request $request, EntityManagerInterface $manager, Proprietaire $proprio, Appartement $appart){
         $form = $this->createFormBuilder($appart)
-                     ->add('proprietaire', EntityType::class, [
-                         'class' => Proprietaire::class, 
-                         'choice_label' => 'nom'
-                     ])
-                    //  ->add('proprietaire', HiddenType::class, [
-                    //      'required' => true
-                    //  ])
                      ->add('adr')
                      ->add('ville')
                      ->add('cp')
@@ -208,10 +235,70 @@ class AdminController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){ //si form est soumis et que les champs sont valide
             $manager->persist($appart); //faire persiter dans le temps les infos du visiteur
             $manager->flush(); //enregistrer dans la bdd
+            $this->addFlash('success', 'Le bien a été modifié avec succès');
+            return $this->redirectToRoute('admin_infoappart', ['id' => $proprio->getIdpers(), 'idAppart' => $appart->getIdappart()]);
+        }
+
+        return $this->render('admin/appart/edit.html.twig', [
+            'formAppart' => $form->createView(), //afficher le formulaire 
+            'proprio' => $proprio
+        ]);
+    }
+    
+    /**
+     * @Route("/creeAppart/{id}", name="creeAppart")
+     * @ParamConverter("creeAppart", options={"mapping" : {"id" : "idpers" }} )
+     */
+    public function creeAppart(Request $request, EntityManagerInterface $manager, Proprietaire $proprio){
+        // $repository = $this->getDoctrine()->getRepository(Proprietaire::class);
+        // $proprio = $repository->find($id);
+        $appart = new Appartement();
+        //$currentdate = new \DateTime('now');
+        $form = $this->createFormBuilder($appart)
+                     ->add('proprietaire', HiddenType::class, [
+                        'empty_data' => $proprio
+                     ])
+                     ->add('adr')
+                     ->add('ville')
+                     ->add('cp')
+                     ->add('etage')
+                     ->add('typeappart', ChoiceType::class, [
+                         'choices' => [
+                             'Appartement' => [
+                                 'F2' => 'F2',
+                                 'F3' => 'F3',
+                                 'F4' => 'F4',
+                                 'F5' => 'F5',
+                                 'F6' => 'F6',
+                             ],
+                            ],
+                     ])
+                     ->add('loyer')
+                     ->add('charge')
+                     ->add('ascenseur')
+                     ->add('preavis')
+                     ->add('datelibre')
+                     ->add('tauxcotisation') 
+                     ->add('taille')
+                     ->add('imageFile', FileType::class, [
+                         'required' =>false
+                     ])
+                    //  ->add('updated_at', HiddenType::class, [
+                    //      'empty_data' => $currentdate
+                    //  ])
+                     ->getForm();
+
+        $form->handleRequest($request); //analyse les POST 
+
+        dump($appart);
+
+        if($form->isSubmitted() && $form->isValid()){ //si form est soumis et que les champs sont valide
+            $manager->persist($appart); //faire persiter dans le temps les infos du visiteur
+            $manager->flush(); //enregistrer dans la bdd
             return $this->redirectToRoute('admin_infoproprio', ['id' => $proprio->getIdpers()]);
         }
 
-        return $this->render('admin/creeAppart.html.twig', [
+        return $this->render('admin/appart/creeAppart.html.twig', [
             'formAppart' => $form->createView(), //afficher le formulaire 
             'proprio' => $proprio
         ]);
@@ -237,5 +324,15 @@ class AdminController extends AbstractController
             'loc' => $loc
         ]);
     }
+
+    /**
+     * @Route("/cotisationdue", name="cotisationdue")
+     */
+    public function getcotisationdues()
+    {
+        return $this->render('admin/cotisationsdues.html.twig');
+    }
+
+    
 
 }

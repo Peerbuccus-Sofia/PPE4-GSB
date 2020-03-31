@@ -19,10 +19,30 @@ class LocataireRepository extends ServiceEntityRepository
         parent::__construct($registry, Locataire::class);
     }
 
-    // /**
-    //  * @return Locataire[] Returns an array of Locataire objects
-    //  */
-    /*
+    /**
+     * @return Locataire[] Returns an array of Locataire objects
+     * retourne un loc en fonction de l'id de l'appartement
+     */
+    public function getloc($idappart){
+        return $this->createQueryBuilder('l')
+                    ->join('l.appartement', 'a')
+                    ->where('a.idappart = :appart')
+                    ->setParameter('appart', $idappart)
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    public function getlocbyid($idloc){
+        return $this->createQueryBuilder('l')
+                    ->join('l.appartement', 'a')
+                    ->where('l.idpers = :idloc')
+                    ->setParameter('idloc', $idloc)
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    //
+     /*
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('l')

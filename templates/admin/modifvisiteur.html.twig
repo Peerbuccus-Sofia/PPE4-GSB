@@ -1,33 +1,64 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-        <visiteur>
+    <visiteur>
+    <div class="container">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-6"><br>
+
+                <table class="table">
+                    <h3>Fiche du visiteur</h3>
+                    <tr>
+                        <th>Nom</th><td> {{ visiteur.nom }}</td>
+                    </tr>
+                    <tr>
+                        <th>Prénom</th><td> {{ visiteur.prenom }}</td>
+                    </tr>
+                    <tr>
+                        <th>Adresse</th><td> {{ visiteur.adr }}</td>
+                    </tr>
+                    <tr>
+                        <th>Ville</th><td> {{ visiteur.ville }}</td>
+                    </tr>
+                    <tr>
+                        <th>Code Postale</th><td> {{ visiteur.cp }}</td>
+                    </tr>
+                    <tr>
+                        <th>Téléphone</th><td> {{ visiteur.tel }}</td>
+                    </tr>
+                    <tr>
+                        <th>Login</th><td> {{ visiteur.username }}</td>
+                    </tr>
+                </table>  
+             </div>
+            <div class="col-3"></div> 
+        </div>
+    </div>
+      
+           
+<br>    
+            {% if visiteur.demandes |length == 0 %}
+            <h3>Le visiteur {{ visiteur.nom }} {{ visiteur.prenom }} n'a pas fait de demande d'appartements</h3>
+            {% else %}
+            <h3>Les demandes d'appartement de {{ visiteur.nom }} {{ visiteur.prenom }} </h3>
             <table class="table">
-                <tr>
-                    <th>Nom</th><td> {{ visiteur.nom }}</td>
-                </tr>
-                <tr>
-                    <th>Prénom</th><td> {{ visiteur.prenom }}</td>
-                </tr>
-                <tr>
-                    <th>Adresse</th><td> {{ visiteur.adr }}</td>
-                </tr>
-                <tr>
-                    <th>Ville</th><td> {{ visiteur.ville }}</td>
-                </tr>
-                <tr>
-                    <th>Code Postale</th><td> {{ visiteur.cp }}</td>
-                </tr>
-                <tr>
-                    <th>Téléphone</th><td> {{ visiteur.tel }}</td>
-                </tr>
-                <tr>
-                    <th>Login</th><td> {{ visiteur.username }}</td>
-                </tr>
-                <tr>
-                     <th>Mot de passe</th><td> {{ visiteur.password }}</td>
-                </tr>
-            </table>           
+                  
+                    <tr>
+                        <th>Type d'appart</th>
+                        <th>Ville</th>
+                        <th>Loyer</th>
+                    </tr>
+                    {% for demande in visiteur.demandes %}
+                    <tr>
+                        <td>{{ demande.typedem }}</td>
+                        <td>{{ demande.ville}}</td>
+                        <td>{{ demande.prix}}</td>
+                    </tr>
+                
+                {% endfor %}
+            </table>
+            {% endif %}
         </visiteur>
-    
+        
 {% endblock %}

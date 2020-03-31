@@ -1,0 +1,188 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+{% if is_granted('ROLE_LOC') or is_granted('ROLE_PROPRIO')   %} 
+<br><br>
+
+<div class="container emp-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img src="https://via.placeholder.com/300x250" alt=""/>
+                    <br><br>
+                    <div class="file"><input type="file"  name="file"/></div>
+                </div>
+            {# {{ dump(user) }} #}
+            
+            </div>
+            <div class="col-md-6">
+                <h2> Bonjour {{ user.username }}</h2><hr>
+                <h4>Voici votre fiche de renseignement</h4>
+            </div>
+            <div class="col-md-2">
+                <input type="submit" class="btn btn-info" name="btnAddMore" value="Modifier le profil"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-work">
+                    <p></p>
+                    {% if is_granted('ROLE_LOC') %}
+                        <a href="{{ path('ficheappart', { 'idappart' : user.appartement.idappart }) }}" class="btn btn-info">Location</a>
+                    {% else %}
+                    <a href="{{ path('proprio_appartements', { 'idproprio' : user.idpers }) }}" class="btn btn-info">Vos appartements</a>
+                    {% endif %}
+                </div>
+                <div class="profile-work">
+                    <p></p>
+                    {% if is_granted('ROLE_LOC') %}
+                        <a href="{{ path('locataire_infoproprio', {'idpers' : user.appartement.proprietaire.idpers }) }}" class="btn btn-info">Votre propriétaire</a>
+                    {% else %}
+                    <a href="" class="btn btn-info">Cotisations</a>
+                    {% endif %}
+                    </div>
+            </div>
+            <div class="col-md-8">
+                <div class="profile-head">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Information personnelle</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <div class="row">
+                                    <div class="col-md-6"><label>Nom d'utilisateur</label></div>
+                                    <div class="col-md-6"><p>{{ user.username }}</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6"><label>Nom</label></div>
+                                    <div class="col-md-6"><p>{{ user.nom }}</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6"><label>Prénom</label></div>
+                                    <div class="col-md-6"><p>{{ user.prenom }}</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6"><label>Téléphone</label></div>
+                                    <div class="col-md-6"><p>{{ user.tel }}</p></div>
+                                </div>
+                                {% if is_granted('ROLE_LOC') %}
+                                <div class="row">
+                                    <div class="col-md-6"><label>Date de naissance</label></div>
+                                    <div class="col-md-6"><p>{{ user.datenaissance | date('d/m/Y')}}</p></div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6"><label>RIB</label></div>
+                                    <div class="col-md-6"><p>{{ user.rib }}</p></div>
+                                </div>
+                                {% else %}
+                                <div class="row">
+                                    <div class="col-md-6"><label>Adresse</label></div>
+                                    <div class="col-md-6"><p>{{ user.adr }}</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6"><label>Ville</label></div>
+                                    <div class="col-md-6"><p>{{ user.ville }}</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6"><label>Code postale</label></div>
+                                    <div class="col-md-6"><p>{{ user.cp }}</p></div>
+                                </div>
+                              {#{{ dump(user)}} #}  
+                                {% endif %}
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+    </form>           
+</div>
+   
+{% else %}
+<h2> {% if app.user %} Bonjour {{ app.user.username }} {% endif %}</h2>
+<br>
+<div class="row">
+    <div class="col-8">
+
+        <appart>
+            <div href="">
+                {% if is_granted('ROLE_ADMIN') %}
+                    <h4>Voici la liste des appartements non occupé</h4>
+                {% endif %}
+               {#{{ dump(apparts)}} #} 
+               {% for msg in app.flashes('success') %}
+               <div class="alert alert-success">
+                   {{ msg }}
+               </div>
+           {% endfor %}
+            {% for appart in apparts %}
+                    <section class="row">
+                        <div class="col-sm-4">
+                            {% if appart.filename|length == 0 %}
+                            <img src="https://via.placeholder.com/230x150" alt=""/>
+                        {% else %}
+                            <img src="/images/appartements/{{ appart.filename }}" alt="" class="img-fluid img-thumbnail" height="900px" width="950">
+                        {% endif %}
+                        </div>
+                        <aside class="col-sm-6">
+                            <address>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <p><strong>Appartement de {{ appart.taille }}<var>m<sup>2</sup></var> </strong></p>
+                                    </div>
+                                    <div class="col"> {{ appart.loyer }} &euro;/mois</div>
+                                </div>
+                            
+                                {{appart.typeappart }} <br>
+                                {{appart.ville }}  {{appart.cp }}<br>
+                                {{appart.adr }} 
+                            </address>
+                            
+                        </aside>
+                        <div class="col-sm-2"><br><br><br><br><br><br>
+                            <div class="row">
+                                 <div class="col-sm-2"><a class="btn btn-info" type="button" href="{{ path('ficheappart', {'idappart' : appart.idappart } )}}" >Détails</a></div>
+                            </div> 
+                        </div>
+                    </section>
+                   
+                     <hr>               
+                {% endfor %}
+            </div>
+        </appart>
+    {{ knp_pagination_render(apparts)}}
+    </div>
+    <div class="col-4">
+        {% if not app.user %}
+               <div class="jumbotron">
+                   <div class="container">
+                    <div class="row">
+                        <div class="col-4"></div>
+                        <div class="col-4"> <p><strong>S'inscrire</strong></p> </div>
+                    </div>
+                    {{ include ('connexion/inscription/_form.html.twig', {form : form} )}}
+                    <br>
+                </div>
+               </div> 
+                
+       
+        <br>
+        {# <a class="btn btn-info" type="button" href="{{ path('inscriptionVisiteur') }}">Inscription</a> #}
+        {% elseif is_granted('ROLE_VISITEUR') %}
+            <a href="{{ path('rechercher')}}" type="button" class="btn btn-info">Recherche avancée</a><br><br>
+            <a href="{{ path('demandeAppart') }}"type="button" class="btn btn-info">Demande d'appartement</a>
+    
+        
+        {% endif %}
+    </div>
+    
+</div>   
+    
+{% endif %}
+
+{% endblock %}

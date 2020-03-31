@@ -2,30 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Visiteur;
+use App\Entity\Visite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method Visiteur|null find($id, $lockMode = null, $lockVersion = null)
- * @method Visiteur|null findOneBy(array $criteria, array $orderBy = null)
- * @method Visiteur[]    findAll()
- * @method Visiteur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Visite|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Visite|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Visite[]    findAll()
+ * @method Visite[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class VisiteurRepository extends ServiceEntityRepository
+class VisiteRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Visiteur::class);
+        parent::__construct($registry, Visite::class);
     }
 
     // /**
-    //  * @return Visiteur[] Returns an array of Visiteur objects
+    //  * @return Visite[] Returns an array of Visite objects
     //  */
     /*
-
-    
-
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('v')
@@ -40,7 +37,7 @@ class VisiteurRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Visiteur
+    public function findOneBySomeField($value): ?Visite
     {
         return $this->createQueryBuilder('v')
             ->andWhere('v.exampleField = :val')

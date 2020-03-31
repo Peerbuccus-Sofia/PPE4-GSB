@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% block title %}Appartement{% endblock %}
+
+{% block body %}
+<proprio> 
+   <br>
+    <div class="container" style="margin-top:30px">
+        {% if  is_granted('ROLE_LOC') %}
+        <a class="btn btn-info" href="{{ path("accueil") }}" type="button">  Retour à ma fiche</a>
+    {% endif %}
+    <hr>
+        <div class="row">
+          <div class="col-4">
+            <h2>Propriétaire :</h2>
+            <h5>{{ proprio.nom }} </h5>
+            <h5>{{ proprio.prenom }}</h5>
+            </div>
+            <br><br><br>
+          <div class="col-8">
+            
+            <h2>Informations personnelles:</h2>
+            
+            
+                <table class="table">
+                    <tr>
+                       <th>Adresse</th><td> {{ proprio.adr }}</td>
+                    </tr>
+                    <tr>
+                       <th>Ville</th><td> {{ proprio.ville }}</td>
+                    </tr>
+                    <tr>
+                       <th>Code Postale</th><td> {{ proprio.cp }}</td>
+                    </tr>
+                    <tr>
+                       <th>Téléphone</th><td> {{ proprio.tel }}</td>
+                    </tr>
+                    <tr>
+                       <th>Login</th><td> {{ proprio.username }}</td>
+                    </tr>
+                </table>           
+            
+           
+            <br>
+            
+          </div>
+{% endblock %}

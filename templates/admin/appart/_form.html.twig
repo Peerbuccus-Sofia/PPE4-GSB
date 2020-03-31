@@ -1,0 +1,46 @@
+{{ form_start(formAppart)}}
+      
+    <div class="row">
+        <div class="col-sm-9">{{ form_row(formAppart.adr, {'label' : 'Adresse'}) }} </div>
+        <div class="col-sm-1"></div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-4"> {{ form_row(formAppart.ville) }}</div>
+        <div class="col-1"></div>
+        <div class="col-sm-4">{{ form_row(formAppart.cp, {'label' : 'Code Postal'}) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">{{ form_row(formAppart.typeappart, {'label' : 'Type d\'appartement'}) }}</div>
+        <div class="col-1"></div>
+        <div class="col-sm-4"> {{ form_row(formAppart.etage, {'label' : 'Etage'}) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9"> {{ form_row(formAppart.taille)}}</div>
+        <div class="col-sm-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3"> {{ form_row(formAppart.loyer, {'label' : 'Loyer'}) }}</div>
+        <div class="col-sm-3">{{ form_row(formAppart.charge, {'label' : 'Charge'}) }}</div>
+        <div class="col-sm-3">{{ form_row(formAppart.tauxcotisation, {'label' : 'Taux de cotisation'})}}</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">{{ form_row(formAppart.ascenseur, { label_attr: {class: 'checkbox-custom'} }) }}</div>
+        <div class="col-sm-4">{{ form_row(formAppart.preavis, { label_attr: {class: 'checkbox-custom'}} ) }}</div>
+        <div class="col-sm-4"></div>
+    </div>  
+    <div class="row">
+        <div class="col-sm-9">{{ form_row(formAppart.datelibre, {'label' : 'Date de libération de l\'appartement'}) }}</div>
+        <div class="col-sm-1"></div>
+    </div>    
+    
+    <div class="row">
+        <div class="col-sm-9">{{ form_row(formAppart.imageFile, {'label' : 'Ajouter une image'}) }} </div>
+        <div class="col-sm-1"></div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-1"><button type="submit"  class="btn btn-info">Valider</button></div>
+    </div>
+    {{ form_end(formAppart)}}

@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    
+    <h1><proprio> {{ proprio.nom}} {{proprio.prenom }}</proprio></h1><hr>
+    <h2>Ajouter un appartement</h2>
+    {{ include ('admin/appart/_form.html.twig', {form : formAppart} ) }}
+    
+ {% endblock %}

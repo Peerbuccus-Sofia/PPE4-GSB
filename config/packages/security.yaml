@@ -56,12 +56,10 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/visiteur, roles: ROLE_USER }
+        - { path: ^/visiteur, roles: ROLE_VISITEUR }
         - {path : ^/proprio, roles : ROLE_PROPRIO }
         - {path : ^/locataire, roles : ROLE_LOC }
 
-    role_hierarchy : 
-        ROLE_PROPRIO : ROLE_USER
-        ROLE_ADMIN : ROLE_PROPRIO
+    
         
 

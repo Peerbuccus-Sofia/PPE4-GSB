@@ -8,13 +8,13 @@
         <h2>Propriétaire :</h2>
         <h5>{{ proprio.nom }} </h5>
         <h5>{{ proprio.prenom }}</h5>
+        {# {{ dump(cotisations) }} #}
         <br><br><br>
+        {% if is_granted('ROLE_ADMIN') %}
         <ul class="nav nav-pills flex-column">
+          <li class="nav-item"></li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Locataire</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
+            <a class="nav-link disabled" href="#">Supprimer ce propriétaire</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" href="{{ path('admin_creeAppart', {'id' : proprio.idpers })}}">Nouvel appartement</a>
@@ -22,6 +22,7 @@
         </ul>
         <hr class="d-sm-none">
       </div>
+      {% endif %}
       <div class="col-sm-8">
         
         <h2>Informations personnelles:</h2>
@@ -43,46 +44,89 @@
                 <tr>
                    <th>Login</th><td> {{ proprio.username }}</td><td>Modifier</td>
                 </tr>
-                <tr>
-                   <th>Mot de passe</th><td> {{ proprio.password }}</td><td>Modifier</td>
-                </tr>
             </table>           
           </div>
        
         <br>
-        
+      </div>    
+      <div class="row"></div>
       </div>
-      <h2>Ses appartements</h2>
-        <table class="table">
-          <thead class="thead-light">
-            <th scope="col">N°</th>
-            <th scope="col">Adresse</th>
-            <th scope="col">Ville</th>
-            <th scope="col">Code Postal</th>
-            <th scope="col">Etage</th>
-            <th scope="col">Type d'appartement</th>
-            <th scope="col">Loyer</th>
-            <th scope="col">Plus</th>
-            <th scope="col" colspan="2">Supprimer</th>  
-          </thead>
-          <tbody>
-            {% for appart in proprio.apparts %}
-              <tr>
-                <td>{{ appart.idappart }}</td>
-                <td>{{ appart.adr }}</td>
-                <td>{{ appart.ville }}</td>
-                <td>{{ appart.cp }}</td>
-                <td>{{ appart.etage }}</td>
-                <td>{{ appart.typeappart }}</td>
-                <td>{{ appart.loyer }}</td>
-                <td><a href="{{ path('admin_infoappart', {'id': proprio.idpers, 'idAppart' : appart.idappart }) }}">Plus d'informations</a></td>
-                <td><a>Supprimer</a></td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            <div class="row">
+              
+              <h2>Ses appartements</h2>
+                    <table class="table">
+                      <thead class="thead-light">
+                        <th scope="col">N°</th>
+                        <th scope="col">Adresse</th>
+                        <th scope="col">Ville</th>
+                        <th scope="col">Code Postal</th>
+                        <th scope="col">Etage</th>
+                        <th scope="col">Type d'appartement</th>
+                        <th scope="col">Loyer</th>
+                        <th scope="col">Plus</th>
+                        <th scope="col" colspan="2">Supprimer</th>  
+                      </thead>
+                      <tbody>
+                        {% for appart in proprio.apparts %}
+                          <tr>
+                            <td>{{ appart.idappart }}</td>
+                            <td>{{ appart.adr }}</td>
+                            <td>{{ appart.ville }}</td>
+                            <td>{{ appart.cp }}</td>
+                            <td>{{ appart.etage }}</td>
+                            <td>{{ appart.typeappart }}</td>
+                            <td>{{ appart.loyer }}</td>
+                            <td><a href="{{ path('admin_infoappart', {'id': proprio.idpers, 'idAppart' : appart.idappart }) }}">Plus d'informations</a></td>
+                            <td>
+                              <form method="post" action="{{ path('admin_suppappart', {'id' : appart.idappart }) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce bien ?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ appart.idappart) }}">
+                                <button class="btn btn-outline-danger">Supprimer</button>
+                              </form>
+                        </td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+            </div>
+            <div class="row"></div>
+            <div class="row">
+              <h2>Ses cotisations par appartement</h2>
+              <br>
+              <table class="table">
+                <thead class="thead-light">
+                  <th scope="col">Appart</th>
+                  <th scope="col">Loyer</th>
+                  <th scope="col">Charge</th>
+                  <th scope="col">Taux de cotisation</th>
+                  <th scope="col">Cotisation</th>
+                </thead>
+                {% for cot in cotisations %}
+                <tr>
+                  <td>N°{{ cot.idappart }}</td>
+                  <td> {{ cot.loyer}} &euro;</td>
+                  <td> {{ cot.charge}}&euro;</td>
+                  <td> {{ cot.tauxcotisation}}%</td>
+                  <td> {{ cot.cotisation}}&euro;</td>
+                </tr> 
+                {% endfor %}
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <th>Total :</th>
+                  {# {{ dump(cotisations)}} #}
+                    {% set sum = 0 %}
+                    {% for toto in cotisations %}
+                      {% set sum = sum + toto.cotisation %}
+                    {% endfor %}
+                  <th> {{ sum }}</th>  
+                </tr>
+              </table>
+            </div>
+        
       </proprio>
-    </div>
+    
   </div>
  
 

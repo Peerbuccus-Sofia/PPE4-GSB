@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Visiteur;
+use App\Entity\Appartement;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,52 +15,66 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Visiter
 {
+
     /**
-     * @var int
+     * @var \Visiteur
      *
-     * @ORM\Column(name="IDPERS", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Visiteur", inversedBy="visites")
+     * @ORM\JoinColumn(nullable=false, name="IDPERS", referencedColumnName="IDPERS") 
      */
     private $idpers;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="IDAPPART", type="integer", nullable=false)
+     * 
+     * 0@var \Appartement
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Appartement", inversedBy="visites", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false, name="IDAPPART", referencedColumnName="IDAPPART") 
      */
     private $idappart;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="DATEVISITE", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
+     * @ORM\Column(name="DATEVISITE", type="datetime", nullable=true)
      */
-    private $datevisite = 'NULL';
+    private $datevisite;
 
-    public function getIdpers(): ?int
+    public function getVisiteur()
     {
         return $this->idpers;
     }
+    public function setVisiteur($visiteur): self
+    {
+        $this->idpers = $visiteur;
 
-    public function getIdappart(): ?int
+        return $this;
+    }
+
+    public function getAppartement()
     {
         return $this->idappart;
     }
 
-    public function getDatevisite(): ?string
+    public function setAppartement($appartement) : self
+    {
+        $this->idappart = $appartement;
+
+        return $this;
+    }
+
+    public function getDatevisite(): ?\DateTimeInterface
     {
         return $this->datevisite;
     }
 
-    public function setDatevisite(?string $datevisite): self
+    public function setDatevisite(?\DateTimeInterface $datevisite): self
     {
         $this->datevisite = $datevisite;
 
         return $this;
     }
-
-
 }
