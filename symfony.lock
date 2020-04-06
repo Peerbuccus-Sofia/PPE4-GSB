@@ -144,6 +144,9 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.0.1"
     },
+    "league/csv": {
+        "version": "9.6.0"
+    },
     "liip/imagine-bundle": {
         "version": "1.8",
         "recipe": {
@@ -575,6 +578,9 @@
     },
     "symfony/yaml": {
         "version": "v4.4.4"
+    },
+    "tangoman/csv-reader-bundle": {
+        "version": "1.0.1"
     },
     "twig/extra-bundle": {
         "version": "v3.0.3"

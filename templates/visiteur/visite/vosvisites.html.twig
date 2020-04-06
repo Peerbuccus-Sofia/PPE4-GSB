@@ -1,0 +1,66 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="container">
+        <h1 style="text-align: center;"><strong>Consulter l'ensemble de vos visites</strong></h1><hr><br><br>
+        <div class="row">
+            <br>   {#  {{ dump(visitesPas) }}  #}
+            <h2>Vos visites passé</h2>
+            <br>
+            <table class="table table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Appartement</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for visite in visitesPas %}
+                        <tr>
+                            <td>Appartement de {{ visite.appartement.taille }} <var>m<sup>2</sup></var> à {{ visite.appartement.adr }} <br> {{ visite.appartement.ville }} - {{ visite.appartement.cp }} <br> Loyer : {{ visite.appartement.loyer }} &euro;/mois </td>
+                            <td>{{ visite.datevisite | date('d/m/Y') }} à {{ visite.datevisite | date('H:i')}}</td>
+                        </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+        </div>     
+<br> {# {{ dump(visitesPro)}} #} 
+        {% for msg in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ msg }}
+        </div>
+        {% endfor %}
+        <div class="row">
+            <h2>Vos prochaine visites</h2>
+            <table class="table table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Appartement</th>
+                        <th scope="col">Date</th>
+                        <th scope="col" colspan="2" style="text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for visite in visitesPro %}
+                        <tr>
+                            <td>Appartement de {{ visite.appartement.taille }} <var>m<sup>2</sup></var> à {{ visite.appartement.adr }} <br> {{ visite.appartement.ville }} - {{ visite.appartement.cp }} <br> Loyer : {{ visite.appartement.loyer }} &euro;/mois </td>
+                            <td>{{ visite.datevisite | date('d/m/Y') }} à {{ visite.datevisite | date('H:i')}}</td>
+                            <td><a href="{{ path('edit', { 'idpers' : visite.visiteurs.idpers, 'idappart' : visite.appartement.idappart, 'idvisite' : visite.idvisite }) }}" class="btn btn-outline-warning">Modifier</a></td>
+                            <td> 
+                                <form method="post" action="{{ path('delete', {'idvisite' : visite.idvisite }) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler votre rendez-vous de visite ?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ visite.idvisite) }}">
+                                    <button class="btn btn-outline-danger">Annuler</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+    
+{% endblock %}

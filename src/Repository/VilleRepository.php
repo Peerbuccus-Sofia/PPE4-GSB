@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Visiter;
+use App\Entity\Ville;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method Visiter|null find($id, $lockMode = null, $lockVersion = null)
- * @method Visiter|null findOneBy(array $criteria, array $orderBy = null)
- * @method Visiter[]    findAll()
- * @method Visiter[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Ville|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Ville|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Ville[]    findAll()
+ * @method Ville[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class VisiterRepository extends ServiceEntityRepository
+class VilleRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Visiter::class);
+        parent::__construct($registry, Ville::class);
     }
 
     // /**
-    //  * @return Visiter[] Returns an array of Visiter objects
+    //  * @return Ville[] Returns an array of Ville objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class VisiterRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Visiter
+    public function findOneBySomeField($value): ?Ville
     {
         return $this->createQueryBuilder('v')
             ->andWhere('v.exampleField = :val')

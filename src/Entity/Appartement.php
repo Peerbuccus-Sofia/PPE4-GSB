@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Appartement
  *
- * @ORM\Table(name="appartement", indexes={@ORM\Index(name="I_FK_APPARTEMENT_PROPRIETAIRE", columns={"PROPRIETAIRE_ID"})})
+ * @ORM\Table(name="appartement", indexes={@ORM\Index(name="I_FK_APPARTEMENT_PROPRIETAIRE", columns={"PROPRIETAIRE_ID"}) })
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="App\Repository\AppartementRepository")
  * @Vich\Uploadable()
@@ -150,16 +150,15 @@ class Appartement
     private $lesvisites;
 
     // /**
-    //  * @ORM\OneToMany(targetEntity="App\Entity\Visiter", mappedBy="appartement")
+    //  * @ORM\ManyToOne(targetEntity="App\Entity\Ville", inversedBy="nomVille")
     //  */
-    // private $visites;
+    // private $villes;
 
    
     public function __construct()
     {
         $this->locataires = new ArrayCollection();
         $this->lesvisites = new ArrayCollection(); 
-       // $this->visites = new ArrayCollection();  
     }
    
 
@@ -437,34 +436,18 @@ class Appartement
           }
 
           return $this;
-      } 
-      
-    //   /**
-    //   * @return Collection|Visite[]
-    //   */
-    //   public function getVisites(): Collection
+      }
+
+    //   public function getVilles(): ?Ville
     //   {
-    //        return $this->visites;
-    //   }
-      
-    //   public function addVisite(Visiter $visite): self
-    //   {
-    //       if(!$this->visites->contains($visite)){
-    //           $this->visites[] = $visite;
-    //           $visite->setAppartement($this);
-    //       }
-    //       return $this;
-    //   }
-  
-    //   public function removeVisite(Visiter $visite): self //supprimer une visite
-    //   {
-    //       if($this->visites->contains($visite)){
-    //           $this->visites->removeElement($visite);
-    //           if($visite->getAppartement() === $this ){
-    //               $visite->setAppartement(null);
-    //           }
-    //       }
-    //       return $this;
+    //       return $this->villes;
     //   }
 
+    //   public function setVilles(?Ville $villes): self
+    //   {
+    //       $this->villes = $villes;
+
+    //       return $this;
+    //   } 
+      
 }

@@ -2,6 +2,11 @@
 
 {% block body %}
     <div class="container"><br>
+        {% for msg in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ msg }}
+        </div>
+        {% endfor %}
         <a href="{{ path('admin_creeproprio') }}" class="btn btn-info">Nouveau propriétaire</a><br><br>
         <table class="table">
             <thead class="thead-light">
@@ -27,10 +32,11 @@
                             <td>{{ proprio.tel }}</td>
                             <td><a href="{{ path('admin_infoproprio', {'id' : proprio.idpers }) }}">En savoir plus</a></td>
                             <td>
-                                {# <form method="post" action="{{ path('admin_suppproprio', {'id' : proprio.idpers }) }}"> #}
+                                <form method="post" action="{{ path('admin_suppproprio', {'id' : proprio.idpers }) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce propriétaire ?')">
                                     <input type="hidden" name="_method" value="DELETE">
-                                    <button class="btn btn-danger">Supprimer</button>
-                                </form>
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ proprio.idpers) }}">
+                                    <button class="btn btn-outline-danger">Supprimer</button>
+                                  </form>
                             </td>
                         
                         </tr>

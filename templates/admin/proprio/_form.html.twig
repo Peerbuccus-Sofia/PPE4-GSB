@@ -1,0 +1,36 @@
+
+<div class="container">
+    <!-- ouverture du formulaire Proprio -->
+    {{ form_start(formProprio) }} 
+    <div class="row">
+        <div class="col-6">
+            {{ form_row(formProprio.nom, {'attr': {'placeholder' : "Nom du Proprio ...", 'label' : "Nom du Proprio"}} ) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(formProprio.prenom, {'label' : 'Prénom'}) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">{{ form_row(formProprio.adr, {'label' : 'Adresse'}) }}</div>
+        <div class="col-4">{{ form_row(formProprio.ville) }}</div>
+        <div class="col-2">{{ form_row(formProprio.cp, {'label' : 'Code Postal'}) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5">{{ form_row(formProprio.tel, {'label' : 'Téléphone'}) }}</div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-5">{{ form_row(formProprio.username, { 'attr' : {'placeholder' : 'Exemple : p_nom.prenom'}} ) }}</div>
+        <div class="col-5"> 
+            <label for="">Mot de passe</label>
+        {{ form_widget(formProprio.password,{'attr' : {'placeholder' : 'Doit contenir au moins 8 caratères'}} ) }}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Valider</button>
+    </div>
+    
+    <!-- fermeture du formulaire -->
+    {{ form_end(formProprio) }}
+</div>

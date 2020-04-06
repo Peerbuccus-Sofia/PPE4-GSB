@@ -19,25 +19,33 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('app_login')}}">Connexion</a>
                             </li>
+                        {% elseif is_granted('ROLE_VISITEUR') %}
                             <li class="nav-item">
-                               {# {{ include ('security/_form.html.twig', { error : error} ) }}#}
+                                <a class="nav-link" href="{{ path('vosvisites', {'idpers' : app.user.idpers }) }}">Vos visites</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('rechercher') }}">Rechercher</a>
+                            </li>
+                    </ul>
+                    <div class="form-inline my-2 my-lg-0">
+                        <a class="btn btn-outline-light my-2 my-sm-0" href="{{ path('app_logout')}}">Se déconnecter</a>
+                    </div> 
                         {% elseif is_granted('ROLE_ADMIN')%}
-                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('admin_lesProprios') }}">Propriétaires</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('admin_lesVisiteurs') }}">Visiteur</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('admin_lesLocataires')}}">Locataire</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('admin_lesProprios') }}">Propriétaires</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('admin_lesVisiteurs') }}">Visiteur</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('admin_lesLocataires')}}">Locataire</a>
+                            </li>
                     </ul>
                     <div class="form-inline my-2 my-lg-0">
                         <a class="btn btn-outline-light my-2 my-sm-0" href="{{ path('app_logout')}}">Se déconnecter</a>
                     </div>
-                        {% elseif (is_granted('ROLE_VISITEUR')) or (is_granted('ROLE_LOC')) or (is_granted('ROLE_PROPRIO'))  %}
-                </ul>
+                        {% elseif (is_granted('ROLE_LOC')) or (is_granted('ROLE_PROPRIO'))  %}
+                    </ul>
                         <div class="form-inline my-2 my-lg-0">
                             <a class="btn btn-outline-light my-2 my-sm-0" href="{{ path('app_logout')}}">Se déconnecter</a>
                         </div>

@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
+
 /**
  * Visiteur
  *
@@ -36,29 +37,33 @@ class Visiteur implements UserInterface
 
     /**
      * @var string|null
-     *
      * @ORM\Column(name="ADR", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
+     * @Assert\NotBlank
      */
     private $adr;
 
     /**
      * @var string|null
-     *
      * @ORM\Column(name="VILLE", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
+     * @Assert\NotBlank
+     * @Assert\Length(min="8", minMessage="Doit faire minimum 8 caractères")
      */
+
     private $ville;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="CP", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
+     * @Assert\Length(min="5", minMessage="Champs obligatoire", max="5")
      */
     private $cp;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="NOM", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
+     * @ORM\Column(name="NOM", type="integer", length=5, nullable=true, options={"default"="NULL","fixed"=true})
+     * @Assert\NotBlank
      */
     private $nom;
 
@@ -66,13 +71,15 @@ class Visiteur implements UserInterface
      * @var string|null
      *
      * @ORM\Column(name="PRENOM", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
+     * @Assert\NotBlank
      */
     private $prenom;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="TEL", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
+     * @ORM\Column(name="TEL", type="integer", length=10, nullable=true, options={"default"="NULL","fixed"=true})
+     * @Assert\NotBlank
      */
     private $tel;
 
@@ -80,6 +87,7 @@ class Visiteur implements UserInterface
      * @var string|null
      *
      * @ORM\Column(name="USERNAME", type="string", length=255, nullable=true, options={"fixed"=true})
+     * @Assert\NotBlank
      * 
      */
     private $username;
@@ -88,18 +96,21 @@ class Visiteur implements UserInterface
      * @var string|null
      *
      * @ORM\Column(name="PASSWORD", type="string", length=255, nullable=true, options={"default"="NULL","fixed"=true})
+     * @Assert\NotBlank
      * @Assert\Length(min="8", minMessage="Votre mot de passe doit faire minimum 8 caractères")
      */
     private $password;
 
     /**
      *  @Assert\EqualTo(propertyPath="password", message="Vous n'avez pas taper le même mot de passe")
-    */
+     *   @Assert\NotBlank
+     */
     public $confirm_password;
 
     /**
      * @var string|null
      * @ORM\Column(name="ROLE", type="json", length=32, options={"default"="ROLE_VISITEUR","fixed"=true})
+     * @Assert\NotBlank
      */
     private $roles;
 

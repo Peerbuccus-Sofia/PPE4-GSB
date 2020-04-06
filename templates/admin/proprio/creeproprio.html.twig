@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %} 
+{% form_theme formProprio 'bootstrap_4_layout.html.twig' %}
+{% block body %}
+
+<h1>Ajouter un nouveau propriétaire</h1>
+
+{{ include('admin/proprio/_form.html.twig', { form : formProprio}) }}
+
+{% endblock %}

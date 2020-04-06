@@ -1,0 +1,36 @@
+<div class="container">
+    <!-- ouverture du formulaire Visiteur -->
+{{ form_start(formVisiteur) }} 
+    <div class="row">
+        <div class="col-6">
+            {{ form_row(formVisiteur.nom, {'attr': {'placeholder' : "Nom du visiteur ...", 'label' : "Nom du visiteur"}} ) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(formVisiteur.prenom, {'label' : 'Prénom'}) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">{{ form_row(formVisiteur.adr, {'label' : 'Adresse'}) }}</div>
+        <div class="col-4">{{ form_row(formVisiteur.ville) }}</div>
+        <div class="col-2"> {{ form_row(formVisiteur.cp, {'label' : 'Code Postal'}) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5"> {{ form_row(formVisiteur.tel, {'label' : 'Téléphone'}) }}</div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-5">{{ form_row(formVisiteur.username, { 'attr' : {'placeholder' : 'Exemple : vis_nom.prenom'}} ) }}</div>
+        <div class="col-5"> 
+            <label for="">Mot de passe</label>
+            {{ form_widget(formVisiteur.password,{ 'attr' : {'placeholder' : 'Doit contenir au moins 8 caratères'}} ) }}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Valider</button>
+    </div>
+    
+    <!-- fermeture du formulaire -->
+    {{ form_end(formVisiteur) }}
+
+</div>

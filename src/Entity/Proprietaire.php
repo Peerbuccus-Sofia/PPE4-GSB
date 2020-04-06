@@ -89,7 +89,7 @@ class Proprietaire implements UserInterface
 
     /**
      * @var string|null
-     * @ORM\Column(name="ROLE", type="json", length=32, nullable=true, options={"default"="ROLE_PROPRIO","fixed"=true})
+     * @ORM\Column(name="ROLE", type="json", length=32, nullable=true, options={"default"="ROLE_VISITEUR","fixed"=true})
      */
     private $roles;
 

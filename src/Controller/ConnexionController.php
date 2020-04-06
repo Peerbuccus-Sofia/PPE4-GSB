@@ -32,6 +32,8 @@ class ConnexionController extends AbstractController
             $hash = $encoder->encodePassword($visiteur, $visiteur->getPassword());
             $visiteur->setPassword($hash);
 
+            $role[] = "ROLE_VISITEUR";
+            $visiteur->setRoles($role);
             $manager->persist($visiteur); // faire persister dans le temps le visiteur
             $manager->flush(); //enregistre dans la bdd
 

@@ -19,9 +19,32 @@ class VisiteRepository extends ServiceEntityRepository
         parent::__construct($registry, Visite::class);
     }
 
-    // /**
-    //  * @return Visite[] Returns an array of Visite objects
-    //  */
+    /**
+     * @return Visite[] Returns an array of Visite objects
+     */
+    public function getVisitesPasserByIdpers($idvisiteur)
+    {
+        $currentdate = new \DateTime('now'); //Date du jour
+        return $this->createQueryBuilder('v')
+                    ->where('v.visiteurs = :idpers')
+                    ->setParameter('idpers', $idvisiteur)
+                    ->andwhere('v.datevisite < :date')
+                    ->setParameter('date', $currentdate->format('Y-m-d'))
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    public function getVisitesProchaineByIdpers($idvisiteur)
+    {
+        $currentdate = new \DateTime('now'); //Date du jour
+        return $this->createQueryBuilder('v')
+                    ->where('v.visiteurs = :idpers')
+                    ->setParameter('idpers', $idvisiteur)
+                    ->andwhere('v.datevisite > :date')
+                    ->setParameter('date', $currentdate->format('Y-m-d'))
+                    ->getQuery()
+                    ->getResult();
+    }
     /*
     public function findByExampleField($value)
     {

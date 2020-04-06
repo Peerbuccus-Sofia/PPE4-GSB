@@ -6,6 +6,8 @@ use App\Entity\Visiteur;
 use App\Entity\Locataire;
 use App\Entity\Appartement;
 use App\Entity\Proprietaire;
+use App\Form\ProprioType;
+use App\Form\VisiteurType;
 use App\Repository\VisiteurRepository;
 use App\Repository\LocataireRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,34 +37,22 @@ class AdminController extends AbstractController
      */
     public function creeVisiteur(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder){
         $visiteur = new Visiteur();
-        $form = $this->createFormBuilder($visiteur)
-                     ->add('nom')
-                     ->add('prenom')
-                     ->add('adr')
-                     ->add('ville')
-                     ->add('cp')
-                     ->add('tel')
-                     ->add('username')
-                     ->add('password', PasswordType::class)
-                     ->getForm();
-
+        $form = $this->createForm(VisiteurType::class, $visiteur);
          $form->handleRequest($request); //analyse les POST 
-
-         dump($visiteur);
-         
 
          if($form->isSubmitted() && $form->isValid()){ //si form est soumis et que les champs sont valide
 
             $passwordEncoded = $encoder->encodePassword($visiteur, $visiteur->getPassword());
             $visiteur->setPassword($passwordEncoded);
 
+            $roles[] = "ROLE_VISITEUR";
+            $visiteur->setRoles($roles);
              $manager->persist($visiteur); //faire persiter dans le temps les infos du visiteur
              $manager->flush(); //enregistrer dans la bdd
 
              return $this->redirectToRoute('admin_lesVisiteurs');
         }
-
-        return $this->render('admin/creevisiteur.html.twig', ['formVisiteur' => $form->createView()
+        return $this->render('admin/visiteur/creevisiteur.html.twig', ['formVisiteur' => $form->createView()
         ]);
     }
 
@@ -84,7 +74,7 @@ class AdminController extends AbstractController
      * retourne les informations d'un visiteur en fonction de son id 
      */
     public function getvisiteur(Visiteur $visiteur){
-        return $this->render('admin/modifvisiteur.html.twig', [
+        return $this->render('admin/visiteur/infovisiteur.html.twig', [
             'visiteur' => $visiteur]);
     }
 
@@ -94,17 +84,7 @@ class AdminController extends AbstractController
      */
     public function creepro(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder){
         $proprio = new Proprietaire();
-        $form = $this->createFormBuilder($proprio) //créer un formulaire
-                // ajout des champs à mon formulaire
-                     ->add('nom') 
-                     ->add('prenom')
-                     ->add('adr')
-                     ->add('ville')
-                     ->add('cp')
-                     ->add('tel')
-                     ->add('username')
-                     ->add('password', PasswordType::class)
-                     ->getForm();
+        $form = $this->createForm(ProprioType::class, $proprio); //créer un formulaire
 
          $form->handleRequest($request); //analyse les POST 
 
@@ -114,21 +94,23 @@ class AdminController extends AbstractController
 
             $passwordEncoded = $encoder->encodePassword($proprio, $proprio->getPassword()); //permet d'encoder le mdp
             $proprio->setPassword($passwordEncoded); //modifie le mdp en mdp encoder
-
-             $manager->persist($proprio); //faire persiter dans le temps les infos du proprietaire
-             $manager->flush(); //enregistrer dans la bdd
+            
+            $role[] = "ROLE_PROPRIO";
+            $proprio->setRoles($role);
+            $manager->persist($proprio); //faire persiter dans le temps les infos du proprietaire
+            $manager->flush(); //enregistrer dans la bdd
               
              return $this->redirectToRoute('admin_lesProprios');
         }
 
-        return $this->render('admin/creeproprio.html.twig', [
+        return $this->render('admin/proprio/creeproprio.html.twig', [
             'formProprio' => $form->createView()
         ]);
     }
 
     /**
      * @Route("/listeProprio", name="lesProprios")
-     * Retourne une collection de propriétaire d'appartement
+     * Retourne une collection de propriétaire 
      */
     public function getlesproprios(ProprietaireRepository $repository){
         $proprio = $repository->findAll();
@@ -144,23 +126,51 @@ class AdminController extends AbstractController
      */
     public function getproprio(Proprietaire $proprio, AppartementRepository $appartementRepository){
         $cotisations = $appartementRepository->getcotisations($proprio->getIdpers());
-        return $this->render('admin/infoproprio.html.twig', [
+        return $this->render('admin/proprio/infoproprio.html.twig', [
             'proprio' => $proprio,
             'cotisations' => $cotisations,
             
         ]);
     }
+   
+    /**
+     * @Route("proprio/{id}", name="suppproprio", methods="DELETE")
+     * @ParamConverter("proprio", options={"mapping": {"id" : "idpers" }} )
+     * @Method("DELETE")
+     */
+    public function deleteProprio(Request $request, Proprietaire $proprio, EntityManagerInterface $manager){
+        dump('supp');
+        if ($this->isCsrfTokenValid('delete'.$proprio->getIdpers(), $request->get('_token'))){
+            $manager->remove($proprio);
+            $manager->flush();
+            $this->addFlash('success', 'Le propriétaire a été supprimer avec succès');
+        }
+        return $this->redirectToRoute('admin_lesProprios');
+        $this->addFlash('success', 'Le propriétaire a été supprimer avec succès');
+    }
 
-    // /**
-    //  * @Route("proprio/{id}", name="suppproprio", methods="DELETE")
-    //  * @Method("DELETE")
-    //  */
-    // public function delete(Request $request, Proprietaire $proprio, EntityManagerInterface $manager){
-    //     dump('supp');
-    //      $manager->remove($proprio);
-    //      $manager->flush();
-    //     return $this->redirectToRoute('lesProprios');
-    // }
+    /**
+     * @Route("proprio/{id}/editproprio", name="editproprio")
+     * @ParamConverter("proprio", options={"mapping": {"id" : "idpers" }} )
+     */
+    public function editpro(Proprietaire $proprio ,Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
+    {
+        $form = $this->createForm(ProprioType::class, $proprio); //créer un formulaire
+        $form->handleRequest($request); //analyse les POST 
+
+         if($form->isSubmitted() && $form->isValid()){ //si form est soumis et que les champs sont valide
+            $passwordEncoded = $encoder->encodePassword($proprio, $proprio->getPassword()); //permet d'encoder le mdp
+            $proprio->setPassword($passwordEncoded); //modifie le mdp en mdp encoder
+
+             $manager->persist($proprio); //faire persiter dans le temps les infos du proprietaire
+             $manager->flush(); //enregistrer dans la bdd
+            
+            return $this->redirectToRoute('admin_infoproprio', [ 'id' => $proprio->getIdpers()]);
+        }
+        return $this->render('admin/proprio/editproprio.html.twig', [
+            'formProprio' => $form->createView()
+        ]);
+    }
 
     /**
      * @Route("/listeProprio/{id}/appart/{idAppart}", name="infoappart")
@@ -181,15 +191,13 @@ class AdminController extends AbstractController
      * @Route("appart/{id}", name="suppappart", methods="DELETE")
      * @Method("DELETE")
      */
-    public function delete(Request $request, Appartement $appart, EntityManagerInterface $manager){
-        dump('supp');
-        dump($appart);
+    public function deleteAppart(Request $request, Appartement $appart, EntityManagerInterface $manager){
         //pour la sécurité, vérifier que le token soit valide
         if ($this->isCsrfTokenValid('delete'.$appart->getIdappart(), $request->get('_token'))){
             $manager->remove($appart);
             $manager->flush(); 
+
         }
-        
         return $this->redirectToRoute('admin_infoproprio', ['id' => $appart->getProprietaire()->getIdpers()] );
     }
 
@@ -310,7 +318,7 @@ class AdminController extends AbstractController
      */
     public function getleslocataires(LocataireRepository $repository){
         $loc = $repository->findAll();
-        return $this->render('admin/listelocataire.html.twig', [
+        return $this->render('admin/locataire/listelocataire.html.twig', [
             'locs' => $loc
         ]);
     }
@@ -320,18 +328,18 @@ class AdminController extends AbstractController
      * retourne les infomations d'un locataire
      */
     public function getloc(Locataire $loc){
-        return $this->render('admin/infolocataire.html.twig', [
+        return $this->render('admin/locataire/infolocataire.html.twig', [
             'loc' => $loc
         ]);
     }
 
-    /**
-     * @Route("/cotisationdue", name="cotisationdue")
-     */
-    public function getcotisationdues()
-    {
-        return $this->render('admin/cotisationsdues.html.twig');
-    }
+    // /**
+    //  * @Route("/cotisationdue", name="cotisationdue")
+    //  */
+    // public function getcotisationdues()
+    // {
+    //     return $this->render('admin/cotisationsdues.html.twig');
+    // }
 
     
 

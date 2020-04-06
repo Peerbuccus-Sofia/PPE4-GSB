@@ -2,18 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Visite;
 use App\Entity\Demande;
 use App\Entity\Visiteur;
-use App\Form\DemandeType;
 use App\Entity\Appartement;
-use App\Entity\Visiter;
 use App\Form\DemandeAppartType;
-use App\Form\RechercheAppartType;
-use App\Repository\DemandeRepository;
-use App\Repository\VisiteurRepository;
+use App\Repository\VisiteRepository;
+use App\Repository\LocataireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AppartementRepository;
-use App\Repository\LocataireRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class VisiteurController extends AbstractController
 {
@@ -44,30 +41,89 @@ class VisiteurController extends AbstractController
      /**
      * @Route("/ficheappart/{idappart}/visiter", name="visite")
      */
-    public function visite(Request $request, EntityManagerInterface $manager ,Appartement $apparts)
+    public function visite(Request $request, EntityManagerInterface $manager ,Appartement $appart)
     {
         $user = $this->getUser();
 
-        $visite = new Visiter;
+        $visite = new Visite;
+         dump($visite);
         $form = $this->createFormBuilder($visite)
+                    ->add('visiteurs', HiddenType::class, [
+                        'empty_data' => $user
+                    ])
+                    ->add('appartement', HiddenType::class, [
+                        'empty_data' => $appart
+                        ])
                     ->add('datevisite')
-                    ->add('idpers')
-                    ->add('idappart')
+                    ->add('Valider',  SubmitType::class)
                     ->getForm();
 
         $form->handleRequest($request); //analyse les POST 
+
         if($form->isSubmitted() && $form->isValid()){ //si form est soumis et que les champs sont valide
             $manager->persist($visite); //faire persiter dans le temps les infos du visiteur
             $manager->flush(); //enregistrer dans la bdd
             $this->addFlash('success', 'Votre demande de visite a bien été enregistrer');
 
-            return $this->redirectToRoute('acceuil');
+            return $this->redirectToRoute('accueil');
         }
             
-        return $this->render('visiteur/visite.html.twig', [
-            'formVisite' => $form,
+        return $this->render('visiteur/visite/visite.html.twig', [
+            'formVisite' => $form->createView(),
             'user' => $user,
-            'appart' =>$apparts
+            'appart' =>$appart
+        ]);
+    }
+
+    /**
+     * @Route("/vosvisites/{idpers}/appart/{idappart}/edit/{idvisite}", name="edit")
+     */
+    public function edit(Visite $visite, EntityManagerInterface $manager, Request $request)
+    {
+        $form = $this->createFormBuilder($visite)
+                    ->add('datevisite')
+                    ->add('Valider',  SubmitType::class)
+                    ->getForm();
+
+        $form->handleRequest($request); //analyse les POST 
+
+        if($form->isSubmitted() && $form->isValid()){ //si form est soumis et que les champs sont valide
+            $manager->persist($visite); //faire persiter dans le temps les infos du visiteur
+            $manager->flush(); //enregistrer dans la bdd
+            $this->addFlash('success', 'Votre demande de visite a bien été modifier');
+
+            return $this->redirectToRoute('vosvisites', ['idpers' => $visite->getVisiteurs()->getIdpers()]);
+        }
+        return $this->render('visiteur/visite/editvisite.html.twig', [
+            'formVisite' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * delete
+     * @Route("/delete/{idvisite}", name="delete")
+     */
+    public function delete(Request $request, EntityManagerInterface $manager, Visite $visite)
+    {
+         //pour la sécurité, vérifier que le token soit valide
+         if ($this->isCsrfTokenValid('delete'.$visite->getIdVisite(), $request->get('_token'))){
+            $manager->remove($visite);
+            $manager->flush(); 
+        }
+        return $this->redirectToRoute('vosvisites', ['idpers' => $this->getUser()->getIdpers()] );
+    }
+
+    /**
+     * @Route("/vosvisites/{idpers}", name="vosvisites")
+     * @ParamConverter("vosvisites", options={"mapping": {"id" : "idpers" }} )
+     */
+    public function vosvisites(VisiteRepository $repo)
+    {       
+        $visitesPas = $repo->getVisitesPasserByIdpers($this->getUser()->getIdpers());
+        $visitesPro = $repo->getVisitesProchaineByIdpers($this->getUser()->getIdpers());
+        return $this->render('visiteur/visite/vosvisites.html.twig', [
+            'visitesPas' => $visitesPas,
+            'visitesPro' => $visitesPro
         ]);
     }
 
@@ -75,7 +131,7 @@ class VisiteurController extends AbstractController
      *@Route("/rechercherAppart", name="rechercher")
      * filtre de recherche 
      */
-    public function rechercherappart(Request $request, PaginatorInterface $paginator , EntityManagerInterface $manager, AppartementRepository $repo/*, Visiteur $visiteur*/)
+    public function rechercherappart(Request $request, PaginatorInterface $paginator, AppartementRepository $repo/*, Visiteur $visiteur*/)
         {
         $form= $this->createForm(DemandeAppartType::class); // formulaire permettant de faire une recherche d'appartement
         $form->handleRequest($request); //analyse les POST 

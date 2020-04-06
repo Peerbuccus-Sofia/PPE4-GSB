@@ -9,13 +9,18 @@
         <h5>{{ proprio.nom }} </h5>
         <h5>{{ proprio.prenom }}</h5>
         {# {{ dump(cotisations) }} #}
-        <br><br><br>
         {% if is_granted('ROLE_ADMIN') %}
         <ul class="nav nav-pills flex-column">
-          <li class="nav-item"></li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="#">Supprimer ce propriétaire</a>
+            <form method="post" action="{{ path('admin_suppproprio', {'id' : proprio.idpers }) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce propriétaire ?')">
+              <input type="hidden" name="_method" value="DELETE">
+              <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ proprio.idpers) }}">
+              <button class="btn btn-outline-danger">Supprimer ce propriétaire</button>
+            </form><br>
           </li>
+          <li class="nav-item">
+              <a class="nav-link active" href="{{ path('admin_editproprio', {'id' : proprio.idpers })}}">Editer le profil</a>
+          </li><br>
           <li class="nav-item">
             <a class="nav-link active" href="{{ path('admin_creeAppart', {'id' : proprio.idpers })}}">Nouvel appartement</a>
           </li>
@@ -30,19 +35,19 @@
           <div>
             <table class="table">
                 <tr>
-                   <th>Adresse</th><td> {{ proprio.adr }}</td><td>Modifier</td>
+                   <th>Adresse</th><td> {{ proprio.adr }}</td>
                 </tr>
                 <tr>
-                   <th>Ville</th><td> {{ proprio.ville }}</td><td>Modifier</td>
+                   <th>Ville</th><td> {{ proprio.ville }}</td>
                 </tr>
                 <tr>
-                   <th>Code Postale</th><td> {{ proprio.cp }}</td><td>Modifier</td>
+                   <th>Code Postale</th><td> {{ proprio.cp }}</td>
                 </tr>
                 <tr>
-                   <th>Téléphone</th><td> {{ proprio.tel }}</td><td>Modifier</td>
+                   <th>Téléphone</th><td> {{ proprio.tel }}</td>
                 </tr>
                 <tr>
-                   <th>Login</th><td> {{ proprio.username }}</td><td>Modifier</td>
+                   <th>Login</th><td> {{ proprio.username }}</td>
                 </tr>
             </table>           
           </div>
