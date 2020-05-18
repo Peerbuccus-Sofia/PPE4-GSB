@@ -2,16 +2,12 @@
 
 namespace App\Entity;
 
-use App\Entity\Visiter;
-use App\Entity\Appartement;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
-
 
 /**
  * Visiteur
@@ -24,6 +20,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * message = "Le nom d'utilisateur que vous avez choisi existe déjà"
  * )
  */
+
 class Visiteur implements UserInterface
 {
     /**
@@ -36,34 +33,34 @@ class Visiteur implements UserInterface
     private $idpers;
 
     /**
-     * @var string|null
-     * @ORM\Column(name="ADR", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
+     * @var string
+     * @ORM\Column(name="ADR", type="string", length=255, nullable=true, options={"default"="NULL","fixed"=true})
      * @Assert\NotBlank
      */
     private $adr;
 
     /**
-     * @var string|null
+     * @var string
      * @ORM\Column(name="VILLE", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
      * @Assert\NotBlank
-     * @Assert\Length(min="8", minMessage="Doit faire minimum 8 caractères")
      */
 
     private $ville;
 
     /**
-     * @var string|null
+     * @var int
      *
-     * @ORM\Column(name="CP", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
-     * @Assert\Length(min="5", minMessage="Champs obligatoire", max="5")
+     * @ORM\Column(name="CP",type="integer", length=5,  nullable=true, options={"default"="NULL","fixed"=true})
+     * @Assert\NotBlank
      */
     private $cp;
 
     /**
-     * @var string|null
+     * @var string
      *
-     * @ORM\Column(name="NOM", type="integer", length=5, nullable=true, options={"default"="NULL","fixed"=true})
+     * @ORM\Column(name="NOM",type="string", length=32,  nullable=true, options={"default"="NULL","fixed"=true})
      * @Assert\NotBlank
+     * 
      */
     private $nom;
 
@@ -78,7 +75,7 @@ class Visiteur implements UserInterface
     /**
      * @var string|null
      *
-     * @ORM\Column(name="TEL", type="integer", length=10, nullable=true, options={"default"="NULL","fixed"=true})
+     * @ORM\Column(name="TEL", type="string", length=10, nullable=true, options={"default"="NULL","fixed"=true})
      * @Assert\NotBlank
      */
     private $tel;
@@ -96,28 +93,19 @@ class Visiteur implements UserInterface
      * @var string|null
      *
      * @ORM\Column(name="PASSWORD", type="string", length=255, nullable=true, options={"default"="NULL","fixed"=true})
-     * @Assert\NotBlank
-     * @Assert\Length(min="8", minMessage="Votre mot de passe doit faire minimum 8 caractères")
      */
     private $password;
 
     /**
      *  @Assert\EqualTo(propertyPath="password", message="Vous n'avez pas taper le même mot de passe")
-     *   @Assert\NotBlank
      */
     public $confirm_password;
 
     /**
      * @var string|null
      * @ORM\Column(name="ROLE", type="json", length=32, options={"default"="ROLE_VISITEUR","fixed"=true})
-     * @Assert\NotBlank
      */
     private $roles;
-
-    // /**
-    //  * @ORM\OneToMany(targetEntity="App\Entity\Visiter", mappedBy="visiteur")
-    //  */
-    // private $visites;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Demande", mappedBy="visiteur")
@@ -132,8 +120,7 @@ class Visiteur implements UserInterface
     public function __construct()
     {
         $this->demandes = new ArrayCollection();
-        $this->lesvisites = new ArrayCollection();
-       // $this->visites = new  ArrayCollection();   
+        $this->lesvisites = new ArrayCollection();   
     }
 
 

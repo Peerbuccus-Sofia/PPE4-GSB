@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -32,9 +34,7 @@ class Locataire implements UserInterface
     private $appartement;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="DATENAISSANCE", type="string", length=32, nullable=true, options={"default"="NULL","fixed"=true})
+     * @ORM\Column(name="DATENAISSANCE", type="datetime")
      */
     private $datenaissance;
 
@@ -119,12 +119,12 @@ class Locataire implements UserInterface
         return (string) $this->getAppartement();
     }
 
-    public function getDatenaissance(): ?string
+    public function getDatenaissance(): ?\DateTimeInterface
     {
         return $this->datenaissance;
     }
 
-    public function setDatenaissance(?string $datenaissance): self
+    public function setDatenaissance(?\DateTimeInterface $datenaissance): self
     {
         $this->datenaissance = $datenaissance;
 

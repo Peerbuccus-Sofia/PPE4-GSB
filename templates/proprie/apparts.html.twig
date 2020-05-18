@@ -12,7 +12,12 @@
             {% for appart in user.apparts %}
             <section class="row">
                 <div class="col-sm-3">
-                    <img src="/images/appartements/{{ appart.filename }}" alt="" class="img-fluid img-thumbnail">
+                    {% if appart.filename|length == 0 %}
+                        <img src="https://via.placeholder.com/900x500" alt=""/>
+                    {% else %}
+                        <img src="/images/appartements/{{ appart.filename }}" alt="" class="img-fluid img-thumbnail">
+                    {% endif %}
+                    
                 </div>
                 <aside class="col-sm-4">
                     <address>

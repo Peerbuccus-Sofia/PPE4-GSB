@@ -2,7 +2,12 @@
 
 {% block body %}
     <div class="container"><br>
-        
+        {% for msg in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ msg }}
+        </div>
+        {% endfor %}
+        <a href="{{ path('admin_creeloc') }}" class="btn btn-info">Nouveau Locataire</a><br><br>
         <table class="table">
             <thead class="thead-light">
             <tr>
@@ -21,12 +26,18 @@
                         <tr>    
                             <td>{{ loc.nom }}</td>
                             <td>{{ loc.prenom }}</td>
-                            <td>{{ loc.datenaissance }}</td>
+                            <td>{{ loc.datenaissance | date('Y/m/d') }}</td>
                             <td>{{ loc.rib }}</td>
                             <td>{{ loc.telbanque }}</td>
                             <td>{{ loc.tel }}</td>
                             <td><a href="{{ path('admin_infoloc', {'id' : loc.idpers }) }}">En savoir plus</a></td>
-                            <td><a href="">Supprimer</a></td>
+                            <td>
+                                <form method="post" action="{{ path('admin_deleteloc', {'id' : loc.idpers }) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce locataire ?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ loc.idpers) }}">
+                                    <button class="btn btn-outline-danger">Supprimer</button>
+                                  </form>
+                            </td>
                         
                         </tr>
                     </loc>

@@ -29,11 +29,13 @@ class ConnexionController extends AbstractController
         $form->handleRequest($request); // le formulaire analyse la request passé en parametre 
 
         if($form->isSubmitted() && $form->isValid()){ // si le formulaire est soumis et que les champs sont valide
+
+            $roles[] = "ROLE_VISITEUR";
+            $visiteur->setRoles($roles);
+            
             $hash = $encoder->encodePassword($visiteur, $visiteur->getPassword());
             $visiteur->setPassword($hash);
-
-            $role[] = "ROLE_VISITEUR";
-            $visiteur->setRoles($role);
+            
             $manager->persist($visiteur); // faire persister dans le temps le visiteur
             $manager->flush(); //enregistre dans la bdd
 

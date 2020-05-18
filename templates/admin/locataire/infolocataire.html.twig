@@ -12,19 +12,19 @@
                <div>
                   <table class="table">
                      <tr>
-                        <th>Téléphone Banque</th><td> {{ loc.telbanque }}</td><td>Modifier</td>
+                        <th>Téléphone Banque</th><td> {{ loc.telbanque }}</td>
                      </tr>
                      <tr>
-                        <th>RIB</th><td> {{ loc.rib }}</td><td>Modifier</td>
+                        <th>RIB</th><td> {{ loc.rib }}</td>
                      </tr>
                      <tr>
-                        <th>Téléphone personnelle</th><td> {{ loc.tel }}</td><td>Modifier</td>
+                        <th>Téléphone personnelle</th><td> {{ loc.tel }}</td>
                      </tr>
                      <tr>
-                        <th>Appartement n°</th><td> {{loc.appartement.idappart }}</td><td>Modifier</td>
+                        <th>Appartement n°</th><td> {{loc.appartement.idappart }}</td>
                      </tr>
                      <tr>
-                        <th>Login</th><td> {{ loc.username }}</td><td>Modifier</td>
+                        <th>Login</th><td> {{ loc.username }}</td>
                      </tr>
                   </table>           
                </div>
@@ -43,6 +43,9 @@
             </div>
               
           </loc>
+      </div>
+      <div class="col-2">
+         <a class="btn btn-info" href="{{ path('admin_editloc', {'idpers' : loc.idpers })}}">Editer le profil</a>
       </div>
     </div>
   </div>

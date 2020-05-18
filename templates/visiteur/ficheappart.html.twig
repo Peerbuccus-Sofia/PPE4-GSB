@@ -4,7 +4,7 @@
 <br>
 <div class="container">
     {% if is_granted('ROLE_ADMIN') %}
-    {{ dump( unAppart )}}
+    {# {{ dump( unAppart )}} #}
         {% for l in loc %}
             {# {{ dump(loc) }} #}
         <a class="btn btn-info" href="{{ path("admin_infoloc", {'id' : l.idpers }) }}" type="button">Locataire résidant</a>

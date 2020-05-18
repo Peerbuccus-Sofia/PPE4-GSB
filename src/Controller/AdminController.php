@@ -4,10 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Visiteur;
 use App\Entity\Locataire;
-use App\Entity\Appartement;
-use App\Entity\Proprietaire;
 use App\Form\ProprioType;
 use App\Form\VisiteurType;
+use App\Entity\Appartement;
+use App\Form\LocataireType;
+use App\Entity\Proprietaire;
 use App\Repository\VisiteurRepository;
 use App\Repository\LocataireRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,8 +48,9 @@ class AdminController extends AbstractController
 
             $roles[] = "ROLE_VISITEUR";
             $visiteur->setRoles($roles);
-             $manager->persist($visiteur); //faire persiter dans le temps les infos du visiteur
-             $manager->flush(); //enregistrer dans la bdd
+            
+            $manager->persist($visiteur); //faire persiter dans le temps les infos du visiteur
+            $manager->flush(); //enregistrer dans la bdd
 
              return $this->redirectToRoute('admin_lesVisiteurs');
         }
@@ -291,9 +293,6 @@ class AdminController extends AbstractController
                      ->add('imageFile', FileType::class, [
                          'required' =>false
                      ])
-                    //  ->add('updated_at', HiddenType::class, [
-                    //      'empty_data' => $currentdate
-                    //  ])
                      ->getForm();
 
         $form->handleRequest($request); //analyse les POST 
@@ -301,8 +300,12 @@ class AdminController extends AbstractController
         dump($appart);
 
         if($form->isSubmitted() && $form->isValid()){ //si form est soumis et que les champs sont valide
+
+            $currentdate = new \DateTime('now');
+            $appart->setUpdatedAt($currentdate);
             $manager->persist($appart); //faire persiter dans le temps les infos du visiteur
             $manager->flush(); //enregistrer dans la bdd
+
             return $this->redirectToRoute('admin_infoproprio', ['id' => $proprio->getIdpers()]);
         }
 
@@ -333,14 +336,73 @@ class AdminController extends AbstractController
         ]);
     }
 
-    // /**
-    //  * @Route("/cotisationdue", name="cotisationdue")
-    //  */
-    // public function getcotisationdues()
-    // {
-    //     return $this->render('admin/cotisationsdues.html.twig');
-    // }
+    /**
+     * @Route("/addloc", name="creeloc")
+     * ajouter un nouveau locataire dans le bdd
+     */
+    public function creeloc(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder){
+        $loc = new Locataire();
+        $form = $this->createForm(LocataireType::class, $loc); //créer un formulaire
 
-    
+         $form->handleRequest($request); //analyse les POST 
+
+         if($form->isSubmitted() && $form->isValid()){ //si form est soumis et que les champs sont valide
+
+            $passwordEncoded = $encoder->encodePassword($loc, $loc->getPassword()); //permet d'encoder le mdp
+            $loc->setPassword($passwordEncoded); //modifie le mdp en mdp encoder
+            
+            $role[] = "ROLE_LOC";
+            $loc->setRoles($role);
+            $manager->persist($loc); //faire persiter dans le temps les infos du proprietaire
+            $manager->flush(); //enregistrer dans la bdd
+              
+             return $this->redirectToRoute('admin_lesLocataires');
+        }
+
+        return $this->render('admin/locataire/addloc.html.twig', [
+            'formLoc' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/edit/{idpers}", name="editloc")
+     */
+    public function editloc(Locataire $loc, Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder){
+        $form = $this->createForm(LocataireType::class, $loc); //créer un formulaire
+        $form->handleRequest($request); //analyse les POST 
+
+         if($form->isSubmitted() && $form->isValid()){ //si form est soumis et que les champs sont valide
+
+            $passwordEncoded = $encoder->encodePassword($loc, $loc->getPassword()); //permet d'encoder le mdp
+            $loc->setPassword($passwordEncoded); //modifie le mdp en mdp encoder
+            
+            $role[] = "ROLE_LOC";
+            $loc->setRoles($role);
+            $manager->persist($loc); //faire persiter dans le temps les infos du proprietaire
+            $manager->flush(); //enregistrer dans la bdd
+              
+             return $this->redirectToRoute('admin_infoloc', [ 'id' => $loc->getIdpers()]);
+        }
+
+        return $this->render('admin/locataire/editloc.html.twig', [
+            'formLoc' => $form->createView()
+        ]);
+    }    
+
+    /**
+     * @Route("loc/{id}", name="deleteloc", methods="DELETE")
+     * @ParamConverter("loc", options={"mapping": {"id" : "idpers" }} )
+     * @Method("DELETE")
+     */
+    public function deleteLoc(Request $request, Locataire $loc, EntityManagerInterface $manager){
+        dump('supp');
+        if ($this->isCsrfTokenValid('delete'.$loc->getIdpers(), $request->get('_token'))){
+            $manager->remove($loc);
+            $manager->flush();
+            $this->addFlash('success', 'Le locataire a été supprimer avec succès');
+        }
+        return $this->redirectToRoute('admin_lesLocataires');
+        $this->addFlash('success', 'Le locataire a été supprimer avec succès');
+    }
 
 }

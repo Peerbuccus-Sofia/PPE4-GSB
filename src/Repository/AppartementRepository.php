@@ -44,28 +44,6 @@ class AppartementRepository extends ServiceEntityRepository
                             ->setParameter('date', $currentdate->format('Y-m-d'))
                             ->andwhere($query->expr()->notIn('ap.idappart ', $loc->getDQL()))
                            ;
-        
-        // if ($recherche->getMinprix()){
-        //     $lesapparts = $lesapparts->andwhere('r.minprix >= :min')
-        //                         ->setParameter('min', $recherche->getMinprix());
-        // }
-        // if ($recherche->getMaxprix()){
-        //     $lesapparts = $lesapparts->andwhere('r.maxprix <= :max')
-        //                             ->setParameter('max', $recherche->getMaxprix());
-        // }
-        // if ($recherche->getTypeappart()){
-        //     $lesapparts = $lesapparts->andwhere('r.typeappart = :type')
-        //                         ->setParameter('type', $recherche->getTypeappart());
-        // }
-        // if ($recherche->getTaille()){
-        //     $lesapparts = $lesapparts->andwhere('r.taille = :taille')
-        //                         ->setParameter('taille', $recherche->getTaille());
-        // }
-        // if ($recherche->getVille()){
-        //     $lesapparts = $lesapparts->andwhere('r.ville = :ville')
-        //                         ->setParameter('ville', $recherche->getVille());
-        // }
-        
         //dump($lesapparts);
         return $lesapparts ->getQuery()->getResult();
     }
@@ -133,30 +111,15 @@ class AppartementRepository extends ServiceEntityRepository
     }
 
 
-
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Appartement
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+    // public function getville()
+    // {
+    //     return $this->createQueryBuilder('a.ville')
+    //         ->andWhere('a.exampleField = :val')
+    //         ->setParameter('val', $value)
+    //         ->orderBy('a.id', 'ASC')
+    //         ->setMaxResults(10)
+    //         ->getQuery()
+    //         ->getResult()
+    //     ;
+    // }
 }

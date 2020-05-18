@@ -14,7 +14,6 @@ use App\Repository\AppartementRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -139,7 +138,7 @@ class VisiteurController extends AbstractController
         $apparts=[];
         if($form->isSubmitted() && $form->isValid()){ //si form est soumis et que les champs sont valide
             $critere = $form->getData();
-           // dd($critere);
+        //    dd($critere);
             $apparts = $repo->rechercheappart($critere);
             $apparts = $paginator->paginate(
                 $apparts, // on passe des données

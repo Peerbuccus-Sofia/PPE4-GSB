@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Visiter;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;

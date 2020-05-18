@@ -9,20 +9,12 @@
     <form method="post">
         <div class="row">
             <div class="col-md-4">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/300x250" alt=""/>
-                    <br><br>
-                    <div class="file"><input type="file"  name="file"/></div>
-                </div>
-            {# {{ dump(user) }} #}
-            
+                <h2> Bonjour {{ user.username }}</h2><hr>
+                
             </div>
             <div class="col-md-6">
-                <h2> Bonjour {{ user.username }}</h2><hr>
                 <h4>Voici votre fiche de renseignement</h4>
-            </div>
-            <div class="col-md-2">
-                <input type="submit" class="btn btn-info" name="btnAddMore" value="Modifier le profil"/>
+                <!-- <input type="submit" class="btn btn-info" name="btnAddMore" value="Modifier le profil"/> -->
             </div>
         </div>
         <div class="row">
@@ -40,7 +32,7 @@
                     {% if is_granted('ROLE_LOC') %}
                         <a href="{{ path('locataire_infoproprio', {'idpers' : user.appartement.proprietaire.idpers }) }}" class="btn btn-info">Votre propriétaire</a>
                     {% else %}
-                    <a href="" class="btn btn-info">Cotisations</a>
+                    <!-- <a href="" class="btn btn-info">Cotisations</a> -->
                     {% endif %}
                     </div>
             </div>
@@ -119,7 +111,8 @@
                <div class="alert alert-success">
                    {{ msg }}
                </div>
-           {% endfor %}
+                {% endfor %}
+                <h2>Appartement à louer</h2><br>
             {% for appart in apparts %}
                     <section class="row">
                         <div class="col-sm-4">
